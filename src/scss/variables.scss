@@ -1,0 +1,28 @@
+/* Variables globales */
+:root {
+  --primary-color: #4467ab;
+  --secondary-color: #284b8e;
+  --text-color: #2b3a57;
+  --border-color: #e9eef3;
+
+  /* AppBar variables */
+  --appbar-bg-start: #ffffff;
+  --appbar-bg-end: #fafbfc;
+  --appbar-border: #e1e4e8;
+  --appbar-shadow: rgba(0, 0, 0, 0.04);
+
+  /* Search input variables */
+  --search-bg-start: #f8fafc;
+  --search-bg-end: #f1f5f9;
+  --search-border: #e2e8f0;
+  --search-focus-border: #3b82f6;
+  --search-text: #1e293b;
+  --search-placeholder: #94a3b8;
+
+  /* Button variables */
+  --button-bg-start: #f8fafc;
+  --button-bg-end: #f1f5f9;
+  --button-border: #e2e8f0;
+  --button-text: #334155;
+  --button-hover-shadow: rgba(0, 0, 0, 0.1);
+}

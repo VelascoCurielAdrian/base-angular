@@ -1,0 +1,29 @@
+<div class="not-found">
+  <div class="not-found__container">
+    <div class="not-found__icon">
+      <lucide-icon [img]="icons.SearchX" [size]="80"></lucide-icon>
+    </div>
+
+    <h1 class="not-found__title">Página no encontrada</h1>
+
+    <div class="not-found__error-code">
+      <span class="not-found__error-label">Error</span>
+      <span class="not-found__error-value">{{ errorCode }}</span>
+    </div>
+
+    <p class="not-found__message">
+      La página a la que quiere acceder no existe o no está disponible en este momento.
+    </p>
+
+    <div class="not-found__actions">
+      <a [routerLink]="homeRoute" class="not-found__btn not-found__btn--primary">
+        <lucide-icon [img]="icons.Home" [size]="20"></lucide-icon>
+        <span>Volver al inicio</span>
+      </a>
+      <button type="button" class="not-found__btn not-found__btn--secondary" (click)="goBack()">
+        <lucide-icon [img]="icons.ArrowLeft" [size]="20"></lucide-icon>
+        <span>Regresar</span>
+      </button>
+    </div>
+  </div>
+</div>

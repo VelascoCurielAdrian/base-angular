@@ -1,0 +1,228 @@
+.not-found {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    animation: pulse 15s ease-in-out infinite;
+  }
+
+  &__container {
+    max-width: 600px;
+    width: 100%;
+    border-radius: 20px;
+    padding: 3rem;
+    border: solid 3px rgba(15, 15, 15, 0.1);
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__icon {
+    color: #003d7a;
+    margin-bottom: 1.5rem;
+    animation: float 3s ease-in-out infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    lucide-icon {
+      display: flex;
+      filter: drop-shadow(0 4px 8px rgba(0, 61, 122, 0.2));
+    }
+  }
+
+  &__title {
+    color: #003d7a;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 1.5rem;
+    text-shadow: 0 2px 4px rgba(0, 61, 122, 0.1);
+  }
+
+  &__error-code {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(212, 175, 55, 0.15) 100%);
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15);
+  }
+
+  &__error-label {
+    font-weight: 600;
+    color: #003d7a;
+    font-size: 0.95rem;
+  }
+
+  &__error-value {
+    font-family: 'Courier New', monospace;
+    color: #002952;
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  &__message {
+    color: #424242;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin: 0 0 2.5rem;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+
+    lucide-icon {
+      display: flex;
+    }
+
+    &--primary {
+      background: linear-gradient(135deg, #003d7a 0%, #002952 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 61, 122, 0.3);
+
+      &:hover {
+        background: linear-gradient(135deg, #004a94 0%, #003366 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 61, 122, 0.4);
+      }
+    }
+
+    &--secondary {
+      background: white;
+      color: #003d7a;
+      border: 2px solid rgba(0, 61, 122, 0.2);
+
+      &:hover {
+        background: rgba(0, 61, 122, 0.05);
+        border-color: rgba(0, 61, 122, 0.4);
+        transform: translateY(-2px);
+      }
+    }
+  }
+
+  &__help {
+    padding-top: 2rem;
+    border-top: 2px solid rgba(212, 175, 55, 0.2);
+
+    p {
+      color: #616161;
+      font-size: 0.9rem;
+      margin: 0 0 1rem;
+    }
+  }
+
+  &__contact {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    &-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #003d7a;
+      font-size: 0.95rem;
+      font-weight: 500;
+      padding: 0.5rem 1rem;
+      background: rgba(0, 61, 122, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 61, 122, 0.1);
+
+      lucide-icon {
+        display: flex;
+        color: #d4af37;
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@media (max-width: 768px) {
+  .not-found {
+    padding: 1rem;
+
+    &__container {
+      padding: 2rem 1.5rem;
+    }
+
+    &__icon {
+      lucide-icon {
+        width: 64px;
+        height: 64px;
+      }
+    }
+
+    &__title {
+      font-size: 2rem;
+    }
+
+    &__message {
+      font-size: 1rem;
+    }
+
+    &__actions {
+      flex-direction: column;
+
+      button,
+      a {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    &__contact {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+  }
+}

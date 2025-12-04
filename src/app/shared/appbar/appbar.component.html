@@ -1,0 +1,26 @@
+<header class="appbar">
+  <div class="appbar__left">
+    <button type="button" class="appbar__menu-button" (click)="onMenuClick()" title="Menú">
+      <lucide-angular [img]="MenuIcon" [size]="24" />
+    </button>
+  </div>
+
+  <div class="appbar__center">
+    <div class="appbar__search-container">
+      <lucide-angular class="appbar__search-icon" [img]="SearchIcon" [size]="20" />
+      <input
+        #searchInput
+        type="text"
+        class="appbar__search-input"
+        placeholder="Buscar opciones o rutas..."
+        (click)="onSearchClick()"
+        readonly
+      />
+      <kbd class="appbar__shortcut">Ctrl K</kbd>
+    </div>
+  </div>
+
+  <div class="appbar__right">
+    <!-- Espacio para futuras acciones como notificaciones, perfil, etc. -->
+  </div>
+</header>

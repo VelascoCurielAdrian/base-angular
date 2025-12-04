@@ -1,0 +1,271 @@
+.appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 2rem;
+  background: linear-gradient(to bottom, #ffffff 0%, #fafbfc 100%);
+  border-bottom: 1px solid #e1e4e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  &__menu-button {
+    display: none; // Oculto por defecto en desktop
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    &:hover {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06);
+
+      &::before {
+        opacity: 1;
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    lucide-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    // Mostrar solo en móvil
+    @media (max-width: 768px) {
+      display: flex;
+    }
+  }
+
+  &__center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 0 1rem;
+
+    @media (max-width: 768px) {
+      position: relative;
+      left: auto;
+      transform: none;
+      flex: 1;
+      padding: 0;
+      margin: 0 0.75rem;
+    }
+  }
+
+  &__search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+
+    &:hover {
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      border-color: #cbd5e1;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+      transform: translateY(-1px);
+    }
+
+    &:focus-within {
+      background: #ffffff;
+      border-color: #3b82f6;
+      box-shadow:
+        0 0 0 4px rgba(59, 130, 246, 0.08),
+        0 4px 12px rgba(59, 130, 246, 0.15),
+        inset 0 1px 2px rgba(255, 255, 255, 1);
+      transform: translateY(-1px);
+    }
+  }
+
+  &__search-icon {
+    color: #64748b;
+    margin-right: 0.875rem;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    .appbar__search-container:hover & {
+      color: #475569;
+    }
+
+    .appbar__search-container:focus-within & {
+      color: #3b82f6;
+    }
+  }
+
+  &__search-input {
+    flex: 1;
+    height: 48px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    color: #1e293b;
+    outline: none;
+    cursor: pointer;
+    letter-spacing: -0.01em;
+
+    &::placeholder {
+      color: #94a3b8;
+      font-weight: 400;
+    }
+
+    &:focus {
+      cursor: text;
+    }
+  }
+
+  &__shortcut {
+    display: flex;
+    align-items: center;
+    gap: 0.125rem;
+    padding: 0.375rem 0.625rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.6875rem;
+    font-family: 'SF Mono', 'Roboto Mono', 'Monaco', monospace;
+    font-weight: 600;
+    color: #64748b;
+    line-height: 1;
+    flex-shrink: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.05),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+
+    .appbar__search-container:hover & {
+      border-color: #cbd5e1;
+      color: #475569;
+    }
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+    justify-content: flex-end;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .appbar {
+    padding: 0 1rem;
+    height: 60px;
+
+    &__left {
+      flex-shrink: 0;
+    }
+
+    &__menu-button {
+      width: 38px;
+      height: 38px;
+    }
+
+    &__search-container {
+      padding: 0 1rem;
+      max-width: 100%;
+    }
+
+    &__shortcut {
+      display: none;
+    }
+
+    &__search-input {
+      height: 44px;
+      font-size: 0.875rem;
+
+      &::placeholder {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .appbar {
+    height: 56px;
+    padding: 0 0.75rem;
+
+    &__center {
+      margin: 0 0.5rem;
+    }
+
+    &__menu-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    &__search-container {
+      padding: 0 0.875rem;
+      border-radius: 10px;
+    }
+
+    &__search-icon {
+      margin-right: 0.625rem;
+    }
+
+    &__search-input {
+      height: 40px;
+      font-size: 0.8125rem;
+
+      &::placeholder {
+        content: "Buscar...";
+        font-size: 0.8125rem;
+      }
+    }
+  }
+}

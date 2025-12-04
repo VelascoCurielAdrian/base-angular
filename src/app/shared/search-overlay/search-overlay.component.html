@@ -1,0 +1,123 @@
+<ng-template #portalContent>
+  <div class="search-overlay">
+    <div class="search-overlay__container">
+      <!-- Header con input de búsqueda -->
+      <div class="search-overlay__header">
+        <lucide-angular
+          class="search-overlay__search-icon"
+          [img]="SearchIcon"
+          [size]="20"
+        />
+        <input
+          #searchInput
+          type="text"
+          class="search-overlay__input"
+          placeholder="Buscar opciones o rutas..."
+          [value]="searchQuery"
+          (input)="onSearchInput($event)"
+          (keydown)="onKeyDown($event)"
+          autocomplete="off"
+        />
+        <kbd class="search-overlay__shortcut">ESC</kbd>
+      </div>
+
+      <!-- Contenido de resultados -->
+      <div class="search-overlay__content">
+        @if (isSearching) {
+          <div class="search-overlay__loading">
+            <div class="search-overlay__spinner"></div>
+            <span>Buscando...</span>
+          </div>
+        } @else if (searchQuery.length < 2) {
+          <div class="search-overlay__empty">
+            <lucide-angular [img]="SearchIcon" [size]="48" />
+            <p class="search-overlay__empty-title">Comienza a buscar</p>
+            <p class="search-overlay__empty-text">Escribe al menos 2 caracteres para buscar</p>
+
+            @if (recentSearches.length > 0) {
+              <div class="search-overlay__recent">
+                <div class="search-overlay__recent-header">
+                  <lucide-angular [img]="ClockIcon" [size]="16" />
+                  <span>Búsquedas recientes</span>
+                </div>
+                @for (result of recentSearches; track result.id) {
+                  <button
+                    class="search-result"
+                    (click)="navigateToResult(result)"
+                    type="button"
+                  >
+                    <lucide-angular
+                      class="search-result__icon"
+                      [img]="result.icon"
+                      [size]="20"
+                    />
+                    <div class="search-result__content">
+                      <div class="search-result__label">{{ result.label }}</div>
+                      <div class="search-result__breadcrumb">{{ result.breadcrumb }}</div>
+                    </div>
+                    <lucide-angular
+                      class="search-result__arrow"
+                      [img]="ArrowRightIcon"
+                      [size]="16"
+                    />
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        } @else if (searchResults.length === 0) {
+          <div class="search-overlay__empty">
+            <lucide-angular [img]="SearchIcon" [size]="48" />
+            <p class="search-overlay__empty-title">No se encontraron resultados</p>
+            <p class="search-overlay__empty-text">
+              Intenta con otros términos de búsqueda
+            </p>
+          </div>
+        } @else {
+          <div class="search-overlay__results">
+            <div class="search-overlay__results-header">
+              {{ searchResults.length }} resultado{{ searchResults.length !== 1 ? 's' : '' }}
+            </div>
+            @for (result of searchResults; track result.id; let i = $index) {
+              <button
+                class="search-result"
+                [class.search-result--selected]="selectedIndex === i"
+                (click)="navigateToResult(result)"
+                (mouseenter)="selectResult(i)"
+                type="button"
+              >
+                <lucide-angular
+                  class="search-result__icon"
+                  [img]="result.icon"
+                  [size]="20"
+                />
+                <div class="search-result__content">
+                  <div class="search-result__label">{{ result.label }}</div>
+                  <div class="search-result__breadcrumb">{{ result.breadcrumb }}</div>
+                </div>
+                <lucide-angular
+                  class="search-result__arrow"
+                  [img]="ArrowRightIcon"
+                  [size]="16"
+                />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- Footer con hints -->
+      <div class="search-overlay__footer">
+        <div class="search-overlay__hint">
+          <kbd>↑</kbd><kbd>↓</kbd> Navegar
+        </div>
+        <div class="search-overlay__hint">
+          <kbd>Enter</kbd> Seleccionar
+        </div>
+        <div class="search-overlay__hint">
+          <kbd>ESC</kbd> Cerrar
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

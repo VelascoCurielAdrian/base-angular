@@ -1,0 +1,114 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  height: 100vh;
+  background: var(--background-color, #f5f7fa);
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    animation: fadeIn 0.3s ease;
+    cursor: pointer;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+    width: calc(100% - 280px);
+    min-width: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  &__content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 2rem;
+    background: var(--background-color, #f5f7fa);
+
+    // Scrollbar styling
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, #cbd5e1 0%, #94a3b8 100%);
+      border-radius: 5px;
+      border: 2px solid #f1f5f9;
+
+      &:hover {
+        background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+      }
+    }
+  }
+}
+
+// Ajuste del margin cuando el sidebar está colapsado
+.layout__main--sidebar-collapsed {
+  margin-left: 70px;
+  width: calc(100% - 70px);
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .layout__main {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+    transition: margin-left 0.3s ease, width 0.3s ease;
+  }
+
+  .layout__main--sidebar-collapsed {
+    margin-left: 70px;
+    width: calc(100% - 70px);
+  }
+
+  .layout__content {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .layout {
+    position: relative;
+  }
+
+  .layout__main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .layout__main--sidebar-collapsed {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .layout__content {
+    padding: 0.75rem;
+  }
+}

@@ -1,0 +1,25 @@
+.info-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  &__title {
+    color: #2b3a57;
+    font-size: 1.1rem;
+    margin: 0 0 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e9eef3;
+  }
+
+  &__item {
+    color: #5b6b82;
+    font-size: 0.95rem;
+    margin: 0.5rem 0;
+    line-height: 1.6;
+
+    strong {
+      color: #2b3a57;
+    }
+  }
+}
