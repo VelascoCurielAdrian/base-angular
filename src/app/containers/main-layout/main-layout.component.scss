@@ -17,6 +17,12 @@
     z-index: 999;
     animation: fadeIn 0.3s ease;
     cursor: pointer;
+
+    &--user-menu {
+      z-index: 9998;
+      background: rgba(0, 0, 0, 0.05);
+      // backdrop-filter: blur(2px);
+    }
   }
 
   @keyframes fadeIn {

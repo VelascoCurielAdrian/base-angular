@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, HostListener, inject, OnInit, signa
 import { RouterOutlet } from '@angular/router';
 
 import { AppbarComponent } from '@shared/appbar/appbar.component';
+import { BreadcrumbComponent } from '@shared/breadcrumb/breadcrumb.component';
 import { SearchOverlayComponent } from '@shared/search-overlay/search-overlay.component';
 import { SidebarComponent } from '@shared/sidebar/sidebar.component';
-import { BreadcrumbComponent } from '@shared/breadcrumb/breadcrumb.component';
 
 import { AuthService } from '@services/auth.service';
 
@@ -21,18 +21,25 @@ import { NavigationConfigService } from '../../config/navigation';
         <div class="layout__overlay" (click)="onToggleSidebar()"></div>
       }
 
+      <!-- Overlay para el menú de usuario -->
+      @if (isUserMenuOpen()) {
+        <div class="layout__overlay layout__overlay--user-menu" (click)="closeUserMenu()"></div>
+      }
+
       <app-sidebar
         [navigationItems]="navigationItems()"
         [userName]="currentUser()"
         [isCollapsed]="isSidebarCollapsed()"
         (toggleCollapse)="onToggleSidebar()"
         (logout)="onLogout()"
+        (itemSelected)="onSidebarItemSelected()"
       />
       <div class="layout__main" [class.layout__main--sidebar-collapsed]="isSidebarCollapsed()">
         <app-appbar
           [isSidebarCollapsed]="isSidebarCollapsed()"
           (toggleSidebar)="onToggleSidebar()"
           (searchFocus)="onSearchFocus()"
+          (userMenuStateChange)="onUserMenuStateChange($event)"
         />
         <main class="layout__content">
           <app-breadcrumb />
@@ -50,17 +57,21 @@ export class MainLayoutComponent implements OnInit {
   private readonly _navigationConfigService = inject(NavigationConfigService);
 
   protected readonly isInitialized = this._authService.isInitialized;
+  ;
   protected readonly currentUser = this._authService.account;
   protected readonly navigationItems = this._navigationConfigService.navigationItems;
 
   protected readonly isSidebarCollapsed = signal(false);
+  protected readonly isUserMenuOpen = signal(false);
   private readonly _mobileBreakpoint = 768;
 
   // ViewChild para el componente de búsqueda
   protected readonly searchOverlay = viewChild<SearchOverlayComponent>(SearchOverlayComponent);
+  protected readonly appbar = viewChild<AppbarComponent>(AppbarComponent);
 
   public ngOnInit(): void {
     this._checkScreenSize();
+    console.log('MainLayoutComponent initialized', this._authService.getUserInfo());
   }
 
   /**
@@ -90,14 +101,32 @@ export class MainLayoutComponent implements OnInit {
     this.isSidebarCollapsed.update((value: boolean) => !value);
   }
 
-  protected onLogout(): void {
-    this._authService.logout();
+  protected async onLogout(): Promise<void> {
+    await this._authService.logout();
   }
 
   protected onSearchFocus(): void {
     const overlay = this.searchOverlay();
     if (overlay) {
       overlay.open();
+    }
+  }
+
+  protected onUserMenuStateChange(isOpen: boolean): void {
+    this.isUserMenuOpen.set(isOpen);
+  }
+
+  protected closeUserMenu(): void {
+    const appbarComponent = this.appbar();
+    if (appbarComponent) {
+      appbarComponent.closeMenu();
+    }
+  }
+
+  protected onSidebarItemSelected(): void {
+    // Ocultar sidebar en móvil al seleccionar una opción
+    if (this.isMobileView()) {
+      this.isSidebarCollapsed.set(true);
     }
   }
 

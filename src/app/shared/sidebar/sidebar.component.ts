@@ -32,6 +32,7 @@ export class SidebarComponent {
 
   public readonly toggleCollapse = output();
   public readonly logout = output();
+  public readonly itemSelected = output();
 
   // Iconos del sistema (UI)
   protected readonly icons = {
@@ -103,5 +104,10 @@ export class SidebarComponent {
   // Verificar si un item padre está expandido y el sidebar no está colapsado
   protected isItemExpandedAndSidebarOpen(itemId: string | number): boolean {
     return this.isItemExpanded(itemId) && !this.isCollapsed();
+  }
+
+  // Manejar el click en un item de navegación
+  protected onItemClick(): void {
+    this.itemSelected.emit();
   }
 }

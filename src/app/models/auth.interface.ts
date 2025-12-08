@@ -39,7 +39,7 @@ export interface LoginResponse {
   method: string;
   statusCode: number;
   data: {
-    user: UserData;
+    user: UserSession;
   };
 }
 
@@ -50,6 +50,36 @@ export interface SessionData {
   exp: number;
 }
 
+export interface PermissionDetail {
+  id: number;
+  key: string;
+  name: string;
+}
+
+export interface PermissionNode {
+  id: number;
+  key: string;
+  name: string;
+  permissions: PermissionDetail[];
+  children?: PermissionNode[];
+}
+
+export interface UserSession extends SessionData {
+  user_id: string;
+  username: string;
+  status: boolean;
+  id: string;
+  profile_id: string | null;
+  first_name: string;
+  email: string;
+  last_name: string;
+  gender: string | null;
+  local_number: string | null;
+  phone_number: string | null;
+  avatar_url: string | null;
+  permissions: PermissionNode[];
+}
+
 export interface VerifyResponse {
   id: string;
   timestamp: string;
@@ -57,6 +87,6 @@ export interface VerifyResponse {
   method: string;
   statusCode: number;
   data: {
-    session: SessionData;
+    session: UserSession  ;
   };
 }

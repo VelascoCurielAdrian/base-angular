@@ -71,6 +71,7 @@
                               [routerLinkActiveOptions]="{ exact: true }"
                               class="sidebar__nav-item sidebar__nav-item--subchild"
                               [title]="subchild.label"
+                              (click)="onItemClick()"
                             >
                               <span class="sidebar__nav-icon">
                                 <lucide-icon [img]="getIcon(subchild, 'Circle')" [size]="12"></lucide-icon>
@@ -98,6 +99,7 @@
                       [routerLinkActiveOptions]="{ exact: true }"
                       class="sidebar__nav-item sidebar__nav-item--child"
                       [title]="child.label"
+                      (click)="onItemClick()"
                     >
                       <span class="sidebar__nav-icon">
                         <lucide-icon [img]="getIcon(child, 'File')" [size]="16"></lucide-icon>
@@ -126,6 +128,7 @@
             [routerLinkActiveOptions]="{ exact: true }"
             class="sidebar__nav-item"
             [title]="item.label"
+            (click)="onItemClick()"
           >
             <span class="sidebar__nav-icon">
               <lucide-icon [img]="getIcon(item, 'File')" [size]="18"></lucide-icon>

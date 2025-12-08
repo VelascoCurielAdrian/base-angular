@@ -1,3 +1,4 @@
+<!-- eslint-disable @angular-eslint/template/no-call-expression -->
 <header class="appbar">
   <div class="appbar__left">
     <button type="button" class="appbar__menu-button" (click)="onMenuClick()" title="Menú">
@@ -21,6 +22,75 @@
   </div>
 
   <div class="appbar__right">
-    <!-- Espacio para futuras acciones como notificaciones, perfil, etc. -->
+    @if (user()) {
+      <div class="appbar__user-menu">
+        <button
+          type="button"
+          class="appbar__user-button"
+          (click)="toggleUserMenu()"
+          [class.appbar__user-button--active]="isUserMenuOpen()"
+          title="Menú de usuario"
+        >
+          <div class="appbar__avatar">
+            @if (user()?.avatar_url) {
+              <img [src]="user()?.avatar_url" [alt]="userName()" class="appbar__avatar-img" />
+            } @else {
+              <span class="appbar__avatar-initials">{{ userInitials() }}</span>
+            }
+          </div>
+          <span class="appbar__user-name">{{ userName() }}</span>
+          <lucide-angular
+            [img]="ChevronDownIcon"
+            [size]="16"
+            class="appbar__chevron"
+            [class.appbar__chevron--rotated]="isUserMenuOpen()"
+          />
+        </button>
+
+        @if (isUserMenuOpen()) {
+          <div
+            class="appbar__user-dropdown"
+            (click)="$event.stopPropagation()"
+            (keyup.enter)="$event.stopPropagation()"
+            tabindex="0"
+          >
+            <div class="appbar__user-info">
+              <div class="appbar__avatar appbar__avatar--large">
+                @if (user()?.avatar_url) {
+                  <img [src]="user()?.avatar_url" [alt]="userName()" class="appbar__avatar-img" />
+                } @else {
+                  <span class="appbar__avatar-initials">{{ userInitials() }}</span>
+                }
+              </div>
+              <div class="appbar__user-details">
+                <p class="appbar__user-details-name">{{ userName() }}</p>
+                <p class="appbar__user-details-email">{{ user()?.email }}</p>
+              </div>
+            </div>
+
+            <div class="appbar__menu-divider"></div>
+
+            <div class="appbar__menu-items">
+              <button type="button" class="appbar__menu-item" (click)="goToProfile()">
+                <lucide-angular [img]="UserIcon" [size]="16" />
+                <span>Mi Perfil</span>
+              </button>
+
+              <button type="button" class="appbar__menu-item" (click)="goToSettings()">
+                <lucide-angular [img]="SettingsIcon" [size]="16" />
+                <span>Configuración</span>
+              </button>
+
+              <div class="appbar__menu-divider"></div>
+
+              <button type="button" class="appbar__menu-item appbar__menu-item--danger" (click)="logout()">
+                <lucide-angular [img]="LogOutIcon" [size]="16" />
+                <span>Cerrar Sesión</span>
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
   </div>
 </header>

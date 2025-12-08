@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 import { environment } from '@environments/environment';
 
-import type { LoginResponse, UserData, Module, Permission, VerifyResponse } from '@models/auth.interface';
+import type { LoginResponse, Module, Permission, VerifyResponse, UserSession, PermissionNode } from '@models/auth.interface';
 import type { HttpError } from '@models/error.interface';
 
 import { ApiHttpClient } from './api-http-client.service';
@@ -13,7 +13,7 @@ import { GlobalLoadingService } from './global-loading.service';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   public readonly account: WritableSignal<string | null> = signal<string | null>(null);
-  public readonly user: WritableSignal<UserData | null> = signal<UserData | null>(null);
+  public readonly user: WritableSignal<UserSession | null> = signal<UserSession | null>(null);
   public readonly permissions: WritableSignal<Module[]> = signal<Module[]>([]);
   public readonly isInitialized: WritableSignal<boolean> = signal<boolean>(true);
 
@@ -21,7 +21,7 @@ export class AuthService {
     return this.account();
   }
 
-  public get currentUser(): UserData | null {
+  public get currentUser(): UserSession | null {
     return this.user();
   }
 
@@ -71,6 +71,7 @@ export class AuthService {
       }
 
       this.account.set(response.data.session.username);
+      this.user.set(response.data.session);
       return true;
     } catch (error) {
       const httpError: HttpError = this._errorHandler.toHttpError(error);
@@ -193,7 +194,13 @@ export class AuthService {
   /**
    * Obtiene información completa del usuario
    */
-  public getUserInfo(): { fullName: string; email: string; phone: string; avatar: string; } | null {
+  public getUserInfo(): {
+    fullName: string;
+    email: string;
+    phone: string;
+    userName: string;
+    avatar: string;
+    permissions: PermissionNode[] } | null {
     const userData = this.currentUser;
 
     if (!userData) {
@@ -203,8 +210,10 @@ export class AuthService {
     return {
       fullName: `${userData.first_name} ${userData.last_name}`.trim(),
       email: userData.email,
-      phone: `${userData.local_number}${userData.phone_number}`,
-      avatar: userData.avatar_url || '/assets/img/default-avatar.png',
+      userName: userData.username,
+      phone: userData.phone_number?.toString() ?? '',
+      avatar: userData.avatar_url ?? '/assets/img/default-avatar.png',
+      permissions: userData.permissions,
     };
   }
 }
