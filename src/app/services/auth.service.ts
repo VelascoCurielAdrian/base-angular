@@ -8,6 +8,7 @@ import type { HttpError } from '@models/error.interface';
 
 import { ApiHttpClient } from './api-http-client.service';
 import { ErrorHandlerService } from './error-handler.service';
+import { GlobalLoadingService } from './global-loading.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     private readonly _api: ApiHttpClient = inject(ApiHttpClient),
     private readonly _router: Router = inject(Router),
     private readonly _errorHandler: ErrorHandlerService = inject(ErrorHandlerService),
+    private readonly _globalLoading: GlobalLoadingService = inject(GlobalLoadingService),
   ) {
     // Verificar sesión al inicializar
     void this._initializeAuth();
@@ -37,6 +39,7 @@ export class AuthService {
    * Inicializa la autenticación verificando la sesión en el backend
    */
   private async _initializeAuth(): Promise<void> {
+    this._globalLoading.show();
     try {
       const isValid = await this.verifySession();
 
@@ -48,6 +51,8 @@ export class AuthService {
       console.error('Error al inicializar autenticación:', httpError.message);
       this._clearAuth();
       this.isInitialized.set(true);
+    } finally {
+      this._globalLoading.hide();
     }
   }
 
@@ -79,6 +84,7 @@ export class AuthService {
    * Login con credenciales usando API REST
    */
   public async loginWithCredentials(username: string, password: string): Promise<LoginResponse> {
+    this._globalLoading.show();
     try {
       const response = await this._api.post<LoginResponse>(
         environment.api.endpoints.login,
@@ -97,6 +103,8 @@ export class AuthService {
     } catch (error) {
       const httpError: HttpError = this._errorHandler.toHttpError(error);
       throw new Error(httpError.message);
+    } finally {
+      this._globalLoading.hide();
     }
   }
 
@@ -104,6 +112,7 @@ export class AuthService {
    * Cerrar sesión
    */
   public async logout(): Promise<void> {
+    this._globalLoading.show();
     try {
       await this._api.post(environment.api.endpoints.logout, {});
     } catch (error) {
@@ -111,6 +120,7 @@ export class AuthService {
       throw new Error(httpError.message);
     } finally {
       this._clearAuth();
+      this._globalLoading.hide();
       void this._router.navigate(['/login']);
     }
   }
