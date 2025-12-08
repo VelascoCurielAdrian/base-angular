@@ -12,9 +12,10 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LucideAngularModule, Menu, Search, User, Settings, LogOut, ChevronDown } from 'lucide-angular';
+import { LucideAngularModule, Menu, Search, User, Settings, LogOut, ChevronDown, Bell } from 'lucide-angular';
 
 import { AuthService } from '@services/auth.service';
+import { NotificationService } from '@services/notification.service';
 import { ToastService } from '@services/toast.service';
 
 /**
@@ -40,6 +41,7 @@ export class AppbarComponent {
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
+  private readonly _notificationService = inject(NotificationService);
 
   // Iconos
   protected readonly SearchIcon = Search;
@@ -48,6 +50,7 @@ export class AppbarComponent {
   protected readonly SettingsIcon = Settings;
   protected readonly LogOutIcon = LogOut;
   protected readonly ChevronDownIcon = ChevronDown;
+  protected readonly BellIcon = Bell;
 
   // Inputs
   public readonly isSidebarCollapsed = input<boolean>(false);
@@ -76,10 +79,14 @@ export class AppbarComponent {
     return (firstInitial + lastInitial).toUpperCase() || user.username[0].toUpperCase();
   });
 
+  // Notificaciones
+  protected readonly unreadNotifications = this._notificationService.unreadCount;
+
   // Outputs para comunicación con el padre
   public readonly toggleSidebar = output();
   public readonly searchFocus = output();
   public readonly userMenuStateChange = output<boolean>();
+  public readonly toggleNotifications = output();
 
   /**
    * Maneja el clic en el input de búsqueda

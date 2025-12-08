@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router';
 
 import { AppbarComponent } from '@shared/appbar/appbar.component';
 import { BreadcrumbComponent } from '@shared/breadcrumb/breadcrumb.component';
+import { NotificationSidebarComponent } from '@shared/notification-sidebar/notification-sidebar.component';
 import { SearchOverlayComponent } from '@shared/search-overlay/search-overlay.component';
 import { SidebarComponent } from '@shared/sidebar/sidebar.component';
 
@@ -13,7 +14,14 @@ import { NavigationConfigService } from '../../config/navigation';
 @Component({
   selector: 'app-main-layout',
   standalone: true,
-  imports: [RouterOutlet, SidebarComponent, AppbarComponent, SearchOverlayComponent, BreadcrumbComponent],
+  imports: [
+    RouterOutlet,
+    SidebarComponent,
+    AppbarComponent,
+    SearchOverlayComponent,
+    BreadcrumbComponent,
+    NotificationSidebarComponent,
+  ],
   template: `
     <div class="layout">
       <!-- Overlay para móviles cuando el sidebar está abierto -->
@@ -40,6 +48,7 @@ import { NavigationConfigService } from '../../config/navigation';
           (toggleSidebar)="onToggleSidebar()"
           (searchFocus)="onSearchFocus()"
           (userMenuStateChange)="onUserMenuStateChange($event)"
+          (toggleNotifications)="onToggleNotifications()"
         />
         <main class="layout__content">
           <app-breadcrumb />
@@ -48,6 +57,7 @@ import { NavigationConfigService } from '../../config/navigation';
       </div>
     </div>
     <app-search-overlay />
+    <app-notification-sidebar [isOpen]="isNotificationsSidebarOpen()" (close)="onToggleNotifications()" />
   `,
   styleUrls: ['./main-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,6 +73,7 @@ export class MainLayoutComponent implements OnInit {
 
   protected readonly isSidebarCollapsed = signal(false);
   protected readonly isUserMenuOpen = signal(false);
+  protected readonly isNotificationsSidebarOpen = signal(false);
   private readonly _mobileBreakpoint = 768;
 
   // ViewChild para el componente de búsqueda
@@ -97,8 +108,12 @@ export class MainLayoutComponent implements OnInit {
     this._checkScreenSize();
   }
 
+  protected onToggleNotifications(): void {
+    this.isNotificationsSidebarOpen.update(value => !value);
+  }
+
   protected onToggleSidebar(): void {
-    this.isSidebarCollapsed.update((value: boolean) => !value);
+    this.isSidebarCollapsed.update(value => !value);
   }
 
   protected async onLogout(): Promise<void> {

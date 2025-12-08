@@ -22,6 +22,13 @@
   </div>
 
   <div class="appbar__right">
+    <button type="button" class="appbar__icon-button" (click)="toggleNotifications.emit()" title="Notificaciones">
+      <lucide-angular [img]="BellIcon" [size]="20" />
+      @if (unreadNotifications() > 0) {
+        <span class="appbar__notification-badge">{{ unreadNotifications() }}</span>
+      }
+    </button>
+
     @if (user()) {
       <div class="appbar__user-menu">
         <button

@@ -6,3 +6,4 @@ export * from './search-result.interface';
 export * from './breadcrumb.interface';
 export * from './error.interface';
 export * from './toast.interface';
+export * from './notification.interface';

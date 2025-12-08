@@ -1,0 +1,81 @@
+<aside class="notification-sidebar" [class.notification-sidebar--open]="isOpen">
+  <div class="notification-sidebar__overlay" (click)="onClose()"></div>
+  <div class="notification-sidebar__content">
+    <header class="notification-sidebar__header">
+      <h2 class="notification-sidebar__title">Notificaciones</h2>
+      <div class="notification-sidebar__header-actions">
+        @if (notifications().length > 0) {
+          <button
+            type="button"
+            class="notification-sidebar__action-btn"
+            (click)="markAllAsRead()"
+            title="Marcar todas como leídas"
+          >
+            <lucide-angular [img]="CheckCheckIcon" [size]="18" />
+          </button>
+        }
+        <button type="button" class="notification-sidebar__close-btn" (click)="onClose()" title="Cerrar">
+          <lucide-angular [img]="CloseIcon" [size]="20" />
+        </button>
+      </div>
+    </header>
+
+    <div class="notification-sidebar__body">
+      @if (notifications().length === 0) {
+        <div class="notification-sidebar__empty">
+          <lucide-angular [img]="CheckCheckIcon" [size]="48" class="notification-sidebar__empty-icon" />
+          <p class="notification-sidebar__empty-text">No tienes notificaciones</p>
+        </div>
+      } @else {
+        <div class="notification-sidebar__list">
+          @for (notification of notifications(); track notification.id) {
+            <div
+              class="notification-item"
+              [class.notification-item--unread]="!notification.isRead"
+              [class.notification-item--info]="notification.type === 'info'"
+              [class.notification-item--success]="notification.type === 'success'"
+              [class.notification-item--warning]="notification.type === 'warning'"
+              [class.notification-item--error]="notification.type === 'error'"
+              (click)="onNotificationClick(notification)"
+            >
+              <div class="notification-item__icon">
+                <lucide-angular [img]="getNotificationIcon(notification.type)" [size]="20" />
+              </div>
+              <div class="notification-item__content">
+                <div class="notification-item__header">
+                  <h3 class="notification-item__title">{{ notification.title }}</h3>
+                  <button
+                    type="button"
+                    class="notification-item__delete-btn"
+                    (click)="removeNotification($event, notification.id)"
+                    title="Eliminar"
+                  >
+                    <lucide-angular [img]="Trash2Icon" [size]="16" />
+                  </button>
+                </div>
+                <p class="notification-item__message">{{ notification.message }}</p>
+                <div class="notification-item__footer">
+                  <span class="notification-item__time">
+                    <lucide-angular [img]="ClockIcon" [size]="12" />
+                    {{ getRelativeTime(notification.timestamp) }}
+                  </span>
+                  @if (notification.actionLabel) {
+                    <span class="notification-item__action">{{ notification.actionLabel }}</span>
+                  }
+                </div>
+              </div>
+              @if (!notification.isRead) {
+                <div class="notification-item__badge"></div>
+              }
+            </div>
+          }
+        </div>
+        <div class="notification-sidebar__footer">
+          <button type="button" class="notification-sidebar__clear-btn" (click)="clearAll()">
+            Limpiar todas
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</aside>
