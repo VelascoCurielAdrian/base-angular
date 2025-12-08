@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { GlobalLoadingComponent } from '@shared/global-loading/global-loading.component';
@@ -17,5 +17,5 @@ export class App {
   private readonly _globalLoading = inject(GlobalLoadingService);
 
   protected readonly title = signal('front-menu-cia');
-  public readonly isLoading = this._globalLoading.isLoading;
+  protected readonly isLoading = computed(() => this._globalLoading.isLoading());
 }
