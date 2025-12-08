@@ -20,11 +20,21 @@ export interface MsalConfig {
   maxTokenAge: number;
 }
 
+export interface ApiConfig {
+  baseUrl: string;
+  endpoints: {
+    login: string;
+    verify: string;
+    logout: string;
+  };
+}
+
 export interface Environment {
   appId: string;
   production: boolean;
   envName: 'PRODUCTION' | 'DEVELOPMENT' | 'LOCAL' | 'STAGING';
   appConfig: string;
+  api: ApiConfig;
   authIdp: {
     msId: MsalConfig;
   };

@@ -5,6 +5,14 @@ export const environment: Environment = {
   production: true,
   envName: 'PRODUCTION',
   appConfig: '/api/settings.json',
+  api: {
+    baseUrl: 'http://localhost:4001',
+    endpoints: {
+      login: '/auth/login',
+      verify: '/auth/verify',
+      logout: '/auth/logout',
+    },
+  },
   authIdp: {
     msId: {
       tenantId: '76d81621-b9a9-4786-bb8f-a2efa839eee2',

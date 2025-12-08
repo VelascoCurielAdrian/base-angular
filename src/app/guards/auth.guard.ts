@@ -11,12 +11,10 @@ export const authGuard: CanActivateFn = async (_route, _state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // Esperar a que MSAL esté inicializado
-  await authService.initializationPromise;
+  // Verificar sesión en el backend
+  const isAuthenticated = await authService.verifySession();
 
-  const account = authService.currentAccount;
-
-  if (account) {
+  if (isAuthenticated) {
     return true;
   }
 

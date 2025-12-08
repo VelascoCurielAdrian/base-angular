@@ -1,78 +1,80 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, effect, inject, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
-import { MsalService, MsalBroadcastService } from '@azure/msal-angular';
-import { InteractionStatus } from '@azure/msal-browser';
-import { filter } from 'rxjs/operators';
-
 import { AuthService } from '@services/auth.service';
+import { ErrorHandlerService } from '@services/error-handler.service';
+
+import type { HttpError } from '@models/error.interface';
+
+interface LoginFormValue {
+  username: string;
+  password: string;
+}
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
   private readonly _router = inject(Router);
-  private readonly _msalService = inject(MsalService);
-  private readonly _msalBroadcast = inject(MsalBroadcastService);
+  private readonly _fb = inject(FormBuilder);
+  private readonly _errorHandler = inject(ErrorHandlerService);
 
   public readonly username = computed(() => this._auth.account());
-  public readonly profile = computed(() => this._auth.profile());
 
-  public user = '';
-  public pass = '';
+  public loginForm!: FormGroup;
+  public showPassword = false;
+  public isLoading = false;
+  public errorMessage = '';
 
   constructor(private readonly _auth: AuthService) {
     // Redirigir al home si ya hay una sesión activa
     effect(() => {
       const username = this.username();
       if (username) {
-        void this._router.navigate(['/home']);
+        void this._router.navigate(['/']);
       }
     });
   }
 
   public ngOnInit(): void {
-    // Manejar la respuesta de redirección de MSAL
-    this._msalBroadcast.inProgress$
-      .pipe(filter((status) => status === InteractionStatus.None))
-      .subscribe(() => {
-        const account = this._msalService.instance.getActiveAccount();
-        if (account) {
-          void this._router.navigate(['/home']);
-        }
-      });
+    // Inicializar formulario
+    this.loginForm = this._fb.group({
+      username: ['', [Validators.required.bind(Validators)]],
+      password: ['', [Validators.required.bind(Validators)]],
+    });
   }
 
   /**
-   * Inicia sesión mediante IDC (MSAL)
+   * Alterna la visibilidad de la contraseña
    */
-  public login(): void {
-    this._auth.login();
-  }
-
-  public logout(): void {
-    this._auth.logout();
-  }
-
-  public loadProfile(): void {
-    void this._auth.loadProfile();
+  public togglePassword(): void {
+    this.showPassword = !this.showPassword;
   }
 
   /**
-   * Maneja el submit del formulario para login tradicional
-   * Por ahora redirige al login de IDC, pero puede implementarse autenticación local
+   * Maneja el submit del formulario de login
    */
-  public onSubmit(event: Event): void {
-    event.preventDefault();
-    // TODO: Implementar autenticación con usuario y contraseña
-    // Por ahora usamos el mismo flujo de IDC
-    this.login();
+  public async onSubmit(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    const { username, password } = this.loginForm.value as LoginFormValue;
+
+    try {
+      await this._auth.loginWithCredentials(username, password);
+      await this._router.navigate(['/']);
+    } catch (error: unknown) {
+      const httpError: HttpError = this._errorHandler.toHttpError(error);
+      this.errorMessage = this._errorHandler.getUserMessage(httpError);
+    } finally {
+      this.isLoading = false;
+    }
   }
 }

@@ -17,5 +17,4 @@ export class SettingsComponent {
   private readonly _authService = inject(AuthService);
 
   protected readonly currentUser = this._authService.account;
-  protected readonly userEmail = this._authService.profile;
 }

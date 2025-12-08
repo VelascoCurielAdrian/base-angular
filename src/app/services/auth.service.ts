@@ -1,153 +1,200 @@
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, type WritableSignal } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
-import { InteractionStatus, type AccountInfo } from '@azure/msal-browser';
 import { environment } from '@environments/environment';
-import { type MsalConfig } from '@environments/environment.interface';
-import { filter, firstValueFrom } from 'rxjs';
 
-import type { UserProfile } from '@models/index';
+import type { LoginResponse, UserData, Module, Permission, VerifyResponse } from '@models/auth.interface';
+import type { HttpError } from '@models/error.interface';
+
+import { ApiHttpClient } from './api-http-client.service';
+import { ErrorHandlerService } from './error-handler.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   public readonly account: WritableSignal<string | null> = signal<string | null>(null);
-  public readonly profile: WritableSignal<UserProfile | null> = signal<UserProfile | null>(null);
-  public readonly isInitialized: WritableSignal<boolean> = signal<boolean>(false);
-  public readonly initializationPromise: Promise<void>;
+  public readonly user: WritableSignal<UserData | null> = signal<UserData | null>(null);
+  public readonly permissions: WritableSignal<Module[]> = signal<Module[]>([]);
+  public readonly isInitialized: WritableSignal<boolean> = signal<boolean>(true);
 
   public get currentAccount(): string | null {
     return this.account();
   }
 
-  private readonly _graphUrl: string;
-  private readonly _scopes: string[];
-  private readonly _graphParams: string;
+  public get currentUser(): UserData | null {
+    return this.user();
+  }
 
   constructor(
-    private readonly _msal: MsalService,
-    private readonly _http: HttpClient,
-    private readonly _msalBroadcast: MsalBroadcastService,
+    private readonly _api: ApiHttpClient = inject(ApiHttpClient),
     private readonly _router: Router = inject(Router),
+    private readonly _errorHandler: ErrorHandlerService = inject(ErrorHandlerService),
   ) {
-    const msalConfig: MsalConfig = environment.authIdp.msId;
-    this._graphUrl = msalConfig.graphUrl;
-    this._scopes = msalConfig.scopes;
-    this._graphParams = msalConfig.graphParams;
-
-    this.initializationPromise = this._initialize();
-    this._handleRedirectResponse();
+    // Verificar sesión al inicializar
+    void this._initializeAuth();
   }
 
-  private async _initialize(): Promise<void> {
-    return new Promise<void>((resolve) => {
-      // Intentar obtener la cuenta inmediatamente
-      const activeAccount = this._getActiveAccount();
-
-      if (activeAccount) {
-        this._msal.instance.setActiveAccount(activeAccount);
-        this.account.set(activeAccount.username);
-        this.isInitialized.set(true);
-        resolve();
-        return;
-      }
-
-      // Si no hay cuenta, esperar a que MSAL termine sus operaciones
-      const subscription = this._msalBroadcast.inProgress$
-        .pipe(filter((status) => status === InteractionStatus.None))
-        .subscribe(() => {
-          const account = this._getActiveAccount();
-
-          if (account) {
-            this._msal.instance.setActiveAccount(account);
-            this.account.set(account.username);
-          }
-
-          this.isInitialized.set(true);
-          subscription.unsubscribe();
-          resolve();
-        });
-
-      // Timeout de seguridad: si después de 5 segundos no se resuelve, continuar
-      setTimeout(() => {
-        if (!this.isInitialized()) {
-          this.isInitialized.set(true);
-          subscription.unsubscribe();
-          resolve();
-        }
-      }, 5000);
-    });
-  }
-
-  private _handleRedirectResponse(): void {
-    this._msal.instance.handleRedirectPromise().then((response) => {
-      if (response?.account) {
-        this._msal.instance.setActiveAccount(response.account);
-        this.account.set(response.account.username);
-        void this.loadProfile();
-      }
-    }).catch((error: unknown) => {
-      console.error('Error handling redirect:', error instanceof Error ? error.message : String(error));
-    });
-  }
-
-  public login(): void {
-    void this._msal.loginRedirect({ scopes: this._scopes });
-  }
-
-  public logout(): void {
-    // Limpiar los datos de sesión sin destruir la instancia de MSAL
-    this.account.set(null);
-    this.profile.set(null);
-
-    // Limpiar sessionStorage (donde MSAL almacena los tokens según la configuración)
-    sessionStorage.clear();
-
-    // Opcional: También limpiar localStorage si es necesario
-    // localStorage.clear();
-
-    // Remover la cuenta activa de MSAL sin hacer logout completo
-    this._msal.instance.setActiveAccount(null);
-
-    // Redirigir al login
-    void this._router.navigate(['/login']);
-  }
-
-  public async loadProfile(): Promise<void> {
+  /**
+   * Inicializa la autenticación verificando la sesión en el backend
+   */
+  private async _initializeAuth(): Promise<void> {
     try {
-      const token = await this._acquireToken();
-      const url = `${this._graphUrl}/v1.0/me?$select=${this._graphParams}`;
+      const isValid = await this.verifySession();
 
-      const profile = await firstValueFrom(
-        this._http.get<UserProfile>(url, {
-          headers: { authorization: `Bearer ${token}` },
-        }),
+      if (!isValid) {
+        this.isInitialized.set(true);
+      }
+    } catch (error) {
+      const httpError: HttpError = this._errorHandler.toHttpError(error);
+      console.error('Error al inicializar autenticación:', httpError.message);
+      this._clearAuth();
+      this.isInitialized.set(true);
+    }
+  }
+
+  /**
+   * Verifica la sesión actual con el backend
+   */
+  public async verifySession(): Promise<boolean> {
+    try {
+      const response = await this._api.get<VerifyResponse>(environment.api.endpoints.verify);
+
+      // La sesión es válida, cargar datos del usuario si están disponibles
+      const userData = this.user();
+
+      if (userData && userData.user_id === response.data.session.sub) {
+        return true;
+      }
+
+      this.account.set(response.data.session.username);
+      return true;
+    } catch (error) {
+      const httpError: HttpError = this._errorHandler.toHttpError(error);
+      console.error('Error al verificar sesión:', httpError.message);
+      this._clearAuth();
+      return false;
+    }
+  }
+
+  /**
+   * Login con credenciales usando API REST
+   */
+  public async loginWithCredentials(username: string, password: string): Promise<LoginResponse> {
+    try {
+      const response = await this._api.post<LoginResponse>(
+        environment.api.endpoints.login,
+        { username, password },
       );
 
-      this.profile.set(profile);
+      // Validar respuestas
+      const userData = response.data.user;
+
+      // Actualizar señales reactivas
+      this.account.set(userData.username);
+      this.user.set(userData);
+      this.permissions.set(userData.permissions);
+
+      return response;
     } catch (error) {
-      console.error('Error loading user profile:', error);
-      throw error;
+      const httpError: HttpError = this._errorHandler.toHttpError(error);
+      throw new Error(httpError.message);
     }
   }
 
-  private _getActiveAccount(): AccountInfo | null {
-    const currentAccount = this._msal.instance.getActiveAccount();
-
-    if (currentAccount) {
-      return currentAccount;
+  /**
+   * Cerrar sesión
+   */
+  public async logout(): Promise<void> {
+    try {
+      await this._api.post(environment.api.endpoints.logout, {});
+    } catch (error) {
+      const httpError: HttpError = this._errorHandler.toHttpError(error);
+      throw new Error(httpError.message);
+    } finally {
+      this._clearAuth();
+      void this._router.navigate(['/login']);
     }
-
-    const accounts = this._msal.instance.getAllAccounts();
-    return accounts.length > 0 ? accounts[0] : null;
   }
 
-  private async _acquireToken(): Promise<string> {
-    const result = await firstValueFrom(
-      this._msal.acquireTokenSilent({ scopes: this._scopes }),
-    );
+  /**
+   * Limpia todos los datos de autenticación
+   */
+  private _clearAuth(): void {
+    this.account.set(null);
+    this.user.set(null);
+    this.permissions.set([]);
+  }
 
-    return result.accessToken;
+  /**
+   * Verificar si el usuario está autenticado
+   */
+  public isAuthenticated(): boolean {
+    return !!this.currentAccount && !!this.currentUser;
+  }
+
+  /**
+   * Verifica si el usuario tiene un permiso específico
+   * @param moduleKey Key del módulo (ej: 'users', 'profiles')
+   * @param permissionKey Key del permiso (ej: 'create', 'view', 'edit')
+   * @param subModuleKey Key opcional del submódulo (ej: 'user-management')
+   */
+  public hasPermission(moduleKey: string, permissionKey: string, subModuleKey?: string ): boolean {
+    const modules = this.permissions();
+
+    if (modules.length === 0) {
+      return false;
+    }
+
+    const module = modules.find(m => m.key === moduleKey);
+
+    if (!module) {
+      return false;
+    }
+
+    // Si se especifica submódulo, buscar en children
+    if (subModuleKey && module.children) {
+      const subModule = module.children.find(sm => sm.key === subModuleKey);
+      if (!subModule) {
+        return false;
+      }
+      return subModule.permissions.some(p => p.key === permissionKey);
+    }
+
+    // Buscar el permiso en el módulo principal
+    return module.permissions.some(p => p.key === permissionKey);
+  }
+
+  /**
+   * Obtiene todos los permisos de un módulo
+   */
+  public getModulePermissions(moduleKey: string): Permission[] {
+    const modules = this.permissions();
+    const module = modules.find(m => m.key === moduleKey);
+    return module?.permissions ?? [];
+  }
+
+  /**
+   * Verifica si el usuario tiene acceso a un módulo
+   */
+  public hasModuleAccess(moduleKey: string): boolean {
+    const modules = this.permissions();
+    return modules.some(m => m.key === moduleKey);
+  }
+
+  /**
+   * Obtiene información completa del usuario
+   */
+  public getUserInfo(): { fullName: string; email: string; phone: string; avatar: string; } | null {
+    const userData = this.currentUser;
+
+    if (!userData) {
+      return null;
+    }
+
+    return {
+      fullName: `${userData.first_name} ${userData.last_name}`.trim(),
+      email: userData.email,
+      phone: `${userData.local_number}${userData.phone_number}`,
+      avatar: userData.avatar_url || '/assets/img/default-avatar.png',
+    };
   }
 }
