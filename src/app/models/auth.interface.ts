@@ -2,6 +2,8 @@
  * Interfaces para el sistema de autenticación y permisos
  */
 
+import { ReposnseGeneral } from './http-client.interface';
+
 export interface Permission {
   id: number;
   key: string;
@@ -32,12 +34,7 @@ export interface UserData {
   permissions: Module[];
 }
 
-export interface LoginResponse {
-  id: string;
-  timestamp: string;
-  path: string;
-  method: string;
-  statusCode: number;
+export interface LoginResponse extends ReposnseGeneral {
   data: {
     user: UserSession;
   };

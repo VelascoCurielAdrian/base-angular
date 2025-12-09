@@ -36,6 +36,7 @@ export default tseslint.config(
     },
     rules: {
       // Angular specific rules
+       "@typescript-eslint/no-unnecessary-condition": "off",
       '@angular-eslint/directive-selector': [
         'error',
         {

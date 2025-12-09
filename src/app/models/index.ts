@@ -7,3 +7,4 @@ export * from './breadcrumb.interface';
 export * from './error.interface';
 export * from './toast.interface';
 export * from './notification.interface';
+export * from './http-client.interface';

@@ -36,7 +36,6 @@ export class LoginComponent implements OnInit {
 
   public loginForm!: FormGroup;
   public showPassword = false;
-  public errorMessage: string | null = null;
 
   constructor(private readonly _auth: AuthService) {
     // Redirigir al home si ya hay una sesión activa
@@ -78,14 +77,14 @@ export class LoginComponent implements OnInit {
     const { username, password } = this.loginForm.value as LoginFormValue;
 
     try {
-      this.errorMessage = null;
-      await this._auth.loginWithCredentials(username, password);
+      const response =  await this._auth.loginWithCredentials(username, password);
+      console.log('Respuesta de login:', response);
       this._toast.success('¡Bienvenido de nuevo!');
       await this._router.navigate(['/']);
-    } catch (error: unknown) {
+    } catch (error) {
+      console.error('Error durante el login:', error);
       const httpError: HttpError = this._errorHandler.toHttpError(error);
-      this.errorMessage = this._errorHandler.getUserMessage(httpError);
-      this._toast.error(this.errorMessage);
+      this._toast.error(this._errorHandler.getUserMessage(httpError));
     }
   }
 }
