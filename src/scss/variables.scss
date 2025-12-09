@@ -1,9 +1,56 @@
-/* Variables globales */
-:root {
+/* Variables globales - Tema Claro */
+:root, :root[data-theme="light"], :root.light {
+  /* Primary colors */
   --primary-color: #4467ab;
+  --primary-dark: #1e293b;
+  --primary-darker: #0f172a;
+  --primary-light: #3b82f6;
+  --primary-medium: #334155;
   --secondary-color: #284b8e;
+  --accent-color: #0ea5e9;
+
+  /* Status colors */
+  --error-color: #dc2626;
+  --error-bg: #fef2f2;
+  --error-border: #fecaca;
+  --success-color: #16a34a;
+
+  /* Text colors */
   --text-color: #2b3a57;
+  --text-color-primary: #2b3a57;
+  --text-color-secondary: #5b6b82;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+
+  /* Border colors */
   --border-color: #e9eef3;
+  --border-color-light: #e2e8f0;
+
+  /* Background colors */
+  --background: #f8fafc;
+  --background-color: #f5f7fa;
+  --white: #ffffff;
+
+  /* Login specific - Tema Veterinaria */
+  --login-bg-start: #10b981;
+  --login-bg-mid: #059669;
+  --login-bg-end: #047857;
+  --login-card-bg: #ffffff;
+  --login-card-shadow: rgba(0, 0, 0, 0.15);
+  --login-input-bg: #ffffff;
+  --login-input-border: #d1d5db;
+  --login-input-focus-border: #10b981;
+  --login-input-text: #111827;
+  --login-label-text: #6b7280;
+  --login-button-bg: #10b981;
+  --login-button-hover-bg: #059669;
+  --login-button-text: #ffffff;
+  --login-circle-color: rgba(255, 255, 255, 0.15);
+  --login-header-bg-start: #10b981;
+  --login-header-bg-end: #047857;
+  --login-title-text: #ffffff;
+  --login-subtitle-text: rgba(255, 255, 255, 0.9);
 
   /* AppBar variables */
   --appbar-bg-start: #ffffff;
@@ -25,4 +72,140 @@
   --button-border: #e2e8f0;
   --button-text: #334155;
   --button-hover-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Shadow variables */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+
+  /* Opacity colors */
+  --overlay-dark: rgba(0, 0, 0, 0.5);
+  --overlay-light: rgba(0, 0, 0, 0.05);
+  --white-transparent-10: rgba(255, 255, 255, 0.1);
+  --white-transparent-15: rgba(255, 255, 255, 0.15);
+  --white-transparent-20: rgba(255, 255, 255, 0.2);
+  --white-transparent-85: rgba(255, 255, 255, 0.85);
+  --white-transparent-98: rgba(255, 255, 255, 0.98);
+  --black-transparent-10: rgba(0, 0, 0, 0.1);
+  --black-transparent-20: rgba(0, 0, 0, 0.2);
+  --primary-transparent-10: rgba(59, 130, 246, 0.1);
+  --error-transparent-10: rgba(220, 38, 38, 0.1);
+
+  /* Border radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Slate colors for gradients and scrollbars */
+  --slate-300: #cbd5e1;
+  --slate-400: #94a3b8;
+  --slate-600: #64748b;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+}
+
+/* Variables globales - Tema Oscuro */
+:root[data-theme="dark"], :root.dark {
+  /* Primary colors */
+  --primary-color: #60a5fa;
+  --primary-dark: #1e293b;
+  --primary-darker: #0f172a;
+  --primary-light: #93c5fd;
+  --primary-medium: #475569;
+  --secondary-color: #3b82f6;
+  --accent-color: #38bdf8;
+
+  /* Status colors */
+  --error-color: #ef4444;
+  --error-bg: #1e1e1e;
+  --error-border: #7f1d1d;
+  --success-color: #22c55e;
+
+  /* Text colors */
+  --text-color: #e2e8f0;
+  --text-color-primary: #f1f5f9;
+  --text-color-secondary: #cbd5e1;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #64748b;
+
+  /* Border colors */
+  --border-color: #334155;
+  --border-color-light: #1e293b;
+
+  /* Background colors */
+  --background: #0f172a;
+  --background-color: #1e293b;
+  --white: #1e293b;
+
+  /* Login specific - Tema Veterinaria Oscuro */
+  --login-bg-start: #064e3b;
+  --login-bg-mid: #0f172a;
+  --login-bg-end: #1e293b;
+  --login-card-bg: #1f2937;
+  --login-card-shadow: rgba(0, 0, 0, 0.5);
+  --login-input-bg: #111827;
+  --login-input-border: #374151;
+  --login-input-focus-border: #10b981;
+  --login-input-text: #f9fafb;
+  --login-label-text: #9ca3af;
+  --login-button-bg: #10b981;
+  --login-button-hover-bg: #059669;
+  --login-button-text: #ffffff;
+  --login-circle-color: rgba(16, 185, 129, 0.1);
+  --login-header-bg-start: #047857;
+  --login-header-bg-end: #065f46;
+  --login-title-text: #ffffff;
+  --login-subtitle-text: rgba(255, 255, 255, 0.85);
+
+  /* AppBar variables */
+  --appbar-bg-start: #1e293b;
+  --appbar-bg-end: #0f172a;
+  --appbar-border: #334155;
+  --appbar-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Search input variables */
+  --search-bg-start: #0f172a;
+  --search-bg-end: #1e293b;
+  --search-border: #334155;
+  --search-focus-border: #60a5fa;
+  --search-text: #f1f5f9;
+  --search-placeholder: #64748b;
+
+  /* Button variables */
+  --button-bg-start: #334155;
+  --button-bg-end: #1e293b;
+  --button-border: #475569;
+  --button-text: #e2e8f0;
+  --button-hover-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Shadow variables */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+
+  /* Opacity colors */
+  --overlay-dark: rgba(0, 0, 0, 0.7);
+  --overlay-light: rgba(0, 0, 0, 0.2);
+  --white-transparent-10: rgba(255, 255, 255, 0.05);
+  --white-transparent-15: rgba(255, 255, 255, 0.08);
+  --white-transparent-20: rgba(255, 255, 255, 0.1);
+  --white-transparent-85: rgba(255, 255, 255, 0.15);
+  --white-transparent-98: rgba(255, 255, 255, 0.2);
+  --black-transparent-10: rgba(0, 0, 0, 0.2);
+  --black-transparent-20: rgba(0, 0, 0, 0.4);
+  --primary-transparent-10: rgba(96, 165, 250, 0.1);
+  --error-transparent-10: rgba(239, 68, 68, 0.1);
+
+  /* Slate colors for gradients and scrollbars */
+  --slate-300: #475569;
+  --slate-400: #64748b;
+  --slate-600: #94a3b8;
+  --slate-700: #cbd5e1;
+  --slate-800: #e2e8f0;
+  --slate-900: #f1f5f9;
 }

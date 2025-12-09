@@ -1,30 +1,6 @@
 // ============================================
-// Variables
+// Usando variables CSS globales de /scss/variables.scss
 // ============================================
-$primary-color: #1e3a8a;
-$primary-dark: #1e293b;
-$primary-light: #3b82f6;
-$accent-color: #0ea5e9;
-$error-color: #dc2626;
-$error-bg: #fef2f2;
-$error-border: #fecaca;
-$success-color: #16a34a;
-$text-primary: #0f172a;
-$text-secondary: #64748b;
-$text-muted: #94a3b8;
-$border-color: #e2e8f0;
-$background: #f8fafc;
-$white: #ffffff;
-
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-
-$radius-sm: 0.375rem;
-$radius-md: 0.5rem;
-$radius-lg: 0.75rem;
-$radius-xl: 1rem;
 
 // ============================================
 // Login Page
@@ -34,10 +10,52 @@ $radius-xl: 1rem;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  background: linear-gradient(135deg, var(--login-bg-start) 0%, var(--login-bg-mid) 50%, var(--login-bg-end) 100%);
   position: relative;
   overflow: hidden;
   padding: 1rem;
+  transition: background 0.3s ease;
+}
+
+// ============================================
+// Theme Toggle Button
+// ============================================
+.theme-toggle {
+  position: fixed;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  width: 3rem;
+  height: 3rem;
+  border: none;
+  border-radius: 50%;
+  background: var(--login-card-bg);
+  box-shadow: 0 4px 12px var(--login-card-shadow);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--login-label-text);
+    transition: color 0.3s ease;
+  }
+
+  &:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px var(--login-card-shadow);
+
+    svg {
+      color: var(--primary-color);
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 }
 
 // ============================================
@@ -52,7 +70,7 @@ $radius-xl: 1rem;
   .circle {
     position: absolute;
     border-radius: 50%;
-    opacity: 0.1;
+    background: var(--login-circle-color);
     animation: float-animate 20s ease-in-out infinite;
 
     &.circle-1 {
@@ -60,7 +78,6 @@ $radius-xl: 1rem;
       right: -5%;
       width: 500px;
       height: 500px;
-      background: radial-gradient(circle, $primary-light, transparent);
       animation-delay: 0s;
     }
 
@@ -69,7 +86,6 @@ $radius-xl: 1rem;
       left: -10%;
       width: 600px;
       height: 600px;
-      background: radial-gradient(circle, $accent-color, transparent);
       animation-delay: -7s;
     }
 
@@ -79,7 +95,6 @@ $radius-xl: 1rem;
       transform: translate(-50%, -50%);
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, $primary-light, transparent);
       animation-delay: -14s;
     }
   }
@@ -124,13 +139,13 @@ $radius-xl: 1rem;
 // Login Card
 // ============================================
 .login-card {
-  background: rgba(255, 255, 255, 0.98);
+  background: var(--login-card-bg);
   backdrop-filter: blur(20px);
-  border-radius: $radius-xl;
-  box-shadow: $shadow-xl;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 20px 60px var(--login-card-shadow);
+  border: 1px solid var(--login-input-border);
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
@@ -142,7 +157,7 @@ $radius-xl: 1rem;
 // Card Header
 // ============================================
 .card-header {
-  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
+  background: linear-gradient(135deg, var(--login-header-bg-start) 0%, var(--login-header-bg-end) 100%);
   padding: 2rem 1.75rem 1.75rem;
   text-align: center;
   position: relative;
@@ -157,9 +172,9 @@ $radius-xl: 1rem;
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.1) 0%,
+      var(--white-transparent-10) 0%,
       transparent 50%,
-      rgba(0, 0, 0, 0.1) 100%
+      var(--overlay-light) 100%
     );
     pointer-events: none;
   }
@@ -176,25 +191,39 @@ $radius-xl: 1rem;
   .logo-wrapper {
     width: 60px;
     height: 60px;
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--white-transparent-15);
     backdrop-filter: blur(10px);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px var(--black-transparent-20);
     animation: logo-pulse 3s ease-in-out infinite;
   }
 
   .logo {
-    width: 30px;
-    height: 30px;
-    color: $white;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    width: 32px;
+    height: 32px;
+    color: var(--login-title-text);
+    filter: drop-shadow(0 2px 4px var(--black-transparent-20));
+
+    ellipse {
+      animation: paw-bounce 2s ease-in-out infinite;
+    }
+
+    ellipse:nth-child(2) { animation-delay: 0.1s; }
+    ellipse:nth-child(3) { animation-delay: 0.2s; }
+    ellipse:nth-child(4) { animation-delay: 0.3s; }
+    ellipse:nth-child(5) { animation-delay: 0.4s; }
   }
 
+@keyframes paw-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
   .title {
-    color: $white;
+    color: var(--login-title-text);
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 0.375rem 0;
@@ -204,7 +233,7 @@ $radius-xl: 1rem;
   }
 
   .subtitle {
-    color: rgba(255, 255, 255, 0.85);
+    color: var(--login-subtitle-text);
     font-size: 0.875rem;
     font-weight: 400;
     margin: 0;
@@ -217,7 +246,7 @@ $radius-xl: 1rem;
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 16px var(--black-transparent-20);
   }
   50% {
     transform: scale(1.05);
@@ -257,7 +286,7 @@ $radius-xl: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: $text-primary;
+  color: var(--login-label-text);
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.01em;
@@ -265,7 +294,7 @@ $radius-xl: 1rem;
   .label-icon {
     width: 18px;
     height: 18px;
-    color: $text-secondary;
+    color: var(--login-label-text);
     stroke-width: 2;
   }
 }
@@ -283,36 +312,36 @@ $radius-xl: 1rem;
 .form-input {
   width: 100%;
   padding: 0.75rem 0.875rem;
-  border: 2px solid $border-color;
-  border-radius: $radius-md;
+  border: 2px solid var(--login-input-border);
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
-  color: $text-primary;
-  background: $white;
+  color: var(--login-input-text);
+  background: var(--login-input-bg);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   outline: none;
   font-family: inherit;
   line-height: 1.5;
 
   &::placeholder {
-    color: $text-muted;
+    color: var(--login-label-text);
   }
 
   &:hover:not(:focus):not(.error) {
-    border-color: $border-color, 10%;
+    border-color: var(--login-input-border);
   }
 
   &:focus {
-    border-color: $primary-light;
-    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    background: $white;
+    border-color: var(--login-input-focus-border);
+    box-shadow: 0 0 0 4px var(--primary-transparent-10);
+    background: var(--login-input-bg);
   }
 
   &.error {
-    border-color: $error-color;
-    background: $error-bg;
+    border-color: var(--error-color);
+    background: var(--error-bg);
 
     &:focus {
-      box-shadow: 0 0 0 4px rgba(220, 38, 38, 0.1);
+      box-shadow: 0 0 0 4px var(--error-transparent-10);
     }
   }
 }
@@ -336,14 +365,14 @@ $radius-xl: 1rem;
   transform: translateY(-50%);
   background: none;
   border: none;
-  color: $text-secondary;
+  color: var(--login-label-text);
   cursor: pointer;
   padding: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  border-radius: $radius-sm;
+  border-radius: var(--radius-sm);
 
   svg {
     width: 20px;
@@ -352,8 +381,8 @@ $radius-xl: 1rem;
   }
 
   &:hover {
-    color: $text-primary;
-    background: rgba(0, 0, 0, 0.05);
+    color: var(--login-input-text);
+    background: var(--overlay-light);
   }
 
   &:active {
@@ -368,7 +397,7 @@ $radius-xl: 1rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: $error-color;
+  color: var(--error-color);
   font-size: 0.8125rem;
   font-weight: 500;
   animation: shake 0.4s ease;
@@ -402,7 +431,7 @@ $radius-xl: 1rem;
   align-items: flex-start;
   gap: 0.875rem;
   padding: 1rem;
-  border-radius: $radius-md;
+  border-radius: var(--radius-md);
   font-size: 0.875rem;
   line-height: 1.5;
   animation: slide-in 0.3s ease-out;
@@ -432,9 +461,9 @@ $radius-xl: 1rem;
   }
 
   &.alert-error {
-    background: $error-bg;
-    color: $error-color;
-    border: 1px solid $error-border;
+    background: var(--error-bg);
+    color: var(--error-color);
+    border: 1px solid var(--error-border);
   }
 }
 
@@ -458,17 +487,17 @@ $radius-xl: 1rem;
   align-items: center;
   justify-content: center;
   gap: 0.625rem;
-  background: linear-gradient(135deg, $primary-color 0%, $primary-dark 100%);
-  color: $white;
+  background: var(--login-button-bg);
+  color: var(--login-button-text);
   border: none;
-  border-radius: $radius-md;
+  border-radius: var(--radius-md);
   padding: 0.875rem 1.25rem;
   font-size: 0.9375rem;
   font-weight: 600;
   letter-spacing: 0.025em;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.3), 0 2px 4px -1px rgba(30, 58, 138, 0.2);
+  box-shadow: 0 4px 6px -1px var(--login-card-shadow), 0 2px 4px -1px var(--login-card-shadow);
   margin-top: 0.375rem;
   position: relative;
   overflow: hidden;
@@ -483,15 +512,15 @@ $radius-xl: 1rem;
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(255, 255, 255, 0.2),
+      var(--white-transparent-20),
       transparent
     );
     transition: left 0.5s ease;
   }
 
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, $primary-light 0%, $primary-color 100%);
-    box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.4), 0 4px 6px -2px rgba(30, 58, 138, 0.3);
+    background: var(--login-button-hover-bg);
+    box-shadow: 0 10px 15px -3px var(--login-card-shadow), 0 4px 6px -2px var(--login-card-shadow);
     transform: translateY(-2px);
 
     &::before {
@@ -505,13 +534,13 @@ $radius-xl: 1rem;
 
   &:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: 0 4px 6px -1px rgba(30, 58, 138, 0.3), 0 2px 4px -1px rgba(30, 58, 138, 0.2);
+    box-shadow: 0 4px 6px -1px var(--login-card-shadow), 0 2px 4px -1px var(--login-card-shadow);
   }
 
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-    background: linear-gradient(135deg, $text-muted 0%, $text-secondary 100%);
+    background: var(--text-muted);
     box-shadow: none;
   }
 
@@ -535,9 +564,9 @@ $radius-xl: 1rem;
 // Card Footer
 // ============================================
 .card-footer {
-  background: linear-gradient(180deg, rgba(248, 250, 252, 0.5) 0%, #f8fafc 100%);
+  background: var(--login-input-bg);
   padding: 1.25rem 1.75rem;
-  border-top: 1px solid $border-color;
+  border-top: 1px solid var(--login-input-border);
 
   .footer-content {
     display: flex;
@@ -549,12 +578,12 @@ $radius-xl: 1rem;
   .footer-icon {
     width: 16px;
     height: 16px;
-    color: $text-muted;
+    color: var(--login-label-text);
     stroke-width: 2;
   }
 
   .access-notice {
-    color: $text-secondary;
+    color: var(--login-label-text);
     font-size: 0.8125rem;
     font-weight: 500;
   }
@@ -569,11 +598,16 @@ $radius-xl: 1rem;
   animation: fade-in 0.8s ease-out 0.3s both;
 
   .info-text {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 0.8125rem;
-    font-weight: 400;
+    color: var(--login-title-text);
+    font-size: 0.875rem;
+    font-weight: 500;
     margin: 0;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--white-transparent-10);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-lg);
+    backdrop-filter: blur(10px);
+    display: inline-block;
   }
 }
 

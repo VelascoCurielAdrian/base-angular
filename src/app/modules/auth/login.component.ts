@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '@services/auth.service';
 import { ErrorHandlerService } from '@services/error-handler.service';
+import { ThemeService } from '@services/theme.service';
 import { ToastService } from '@services/toast.service';
 
 import type { HttpError } from '@models/error.interface';
@@ -27,8 +28,11 @@ export class LoginComponent implements OnInit {
   private readonly _fb = inject(FormBuilder);
   private readonly _errorHandler = inject(ErrorHandlerService);
   private readonly _toast = inject(ToastService);
+  public readonly _theme = inject(ThemeService);
+  public isDarkTheme = false;
 
   public readonly username = computed(() => this._auth.account());
+  public readonly isDark = computed(() => this._theme.currentTheme() === 'dark');
 
   public loginForm!: FormGroup;
   public showPassword = false;
@@ -57,6 +61,14 @@ export class LoginComponent implements OnInit {
    */
   public togglePassword(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  /**
+   * Alterna entre tema claro y oscuro
+   */
+  public toggleTheme(): void {
+    this._theme.toggleTheme();
+    console.log('Tema cambiado a:', this._theme.currentTheme());
   }
 
   /**
