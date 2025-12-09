@@ -29,17 +29,10 @@ import { NavigationConfigService } from '../../config/navigation';
         <div class="layout__overlay" (click)="onToggleSidebar()"></div>
       }
 
-      <!-- Overlay para el menú de usuario -->
-      @if (isUserMenuOpen()) {
-        <div class="layout__overlay layout__overlay--user-menu" (click)="closeUserMenu()"></div>
-      }
-
       <app-sidebar
         [navigationItems]="navigationItems()"
-        [userName]="currentUser()"
         [isCollapsed]="isSidebarCollapsed()"
         (toggleCollapse)="onToggleSidebar()"
-        (logout)="onLogout()"
         (itemSelected)="onSidebarItemSelected()"
       />
       <div class="layout__main" [class.layout__main--sidebar-collapsed]="isSidebarCollapsed()">
@@ -72,7 +65,6 @@ export class MainLayoutComponent implements OnInit {
   protected readonly navigationItems = this._navigationConfigService.navigationItems;
 
   protected readonly isSidebarCollapsed = signal(false);
-  protected readonly isUserMenuOpen = signal(false);
   protected readonly isNotificationsSidebarOpen = signal(false);
   private readonly _mobileBreakpoint = 768;
 
@@ -116,10 +108,6 @@ export class MainLayoutComponent implements OnInit {
     this.isSidebarCollapsed.update(value => !value);
   }
 
-  protected async onLogout(): Promise<void> {
-    await this._authService.logout();
-  }
-
   protected onSearchFocus(): void {
     const overlay = this.searchOverlay();
     if (overlay) {
@@ -127,15 +115,8 @@ export class MainLayoutComponent implements OnInit {
     }
   }
 
-  protected onUserMenuStateChange(isOpen: boolean): void {
-    this.isUserMenuOpen.set(isOpen);
-  }
-
-  protected closeUserMenu(): void {
-    const appbarComponent = this.appbar();
-    if (appbarComponent) {
-      appbarComponent.closeMenu();
-    }
+  protected onUserMenuStateChange(_isOpen: boolean): void {
+    // El estado del menú de usuario ahora se maneja completamente en el appbar
   }
 
   protected onSidebarItemSelected(): void {

@@ -27,7 +27,6 @@ import type { NavigationItem } from '../../config/navigation';
 })
 export class SidebarComponent {
   public readonly navigationItems = input.required<NavigationItem[]>();
-  public readonly userName = input<string | null>(null);
   public readonly isCollapsed = input<boolean>(false);
 
   public readonly toggleCollapse = output();
@@ -66,7 +65,6 @@ export class SidebarComponent {
     event.stopPropagation();
 
     const expanded = new Set(this._expandedItems());
-    console.log(expanded);
     if (expanded.has(item.id)) {
       expanded.delete(item.id);
     } else {

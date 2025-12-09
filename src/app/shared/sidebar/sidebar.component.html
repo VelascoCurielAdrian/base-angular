@@ -150,21 +150,4 @@
       }
     }
   </nav>
-
-  <div class="sidebar__footer">
-    <div class="sidebar__user">
-      <span class="sidebar__user-icon">
-        <lucide-icon [img]="icons.User" [size]="22"></lucide-icon>
-      </span>
-      @if (!isCollapsed()) {
-      <span class="sidebar__user-name">{{ userName() }}</span>
-      }
-    </div>
-    <button type="button" class="sidebar__logout" (click)="logout.emit()" [title]="'Cerrar sesión'">
-      <lucide-icon [img]="icons.LogOut" [size]="18"></lucide-icon>
-      @if (!isCollapsed()) {
-      <span>Cerrar sesión</span>
-      }
-    </button>
-  </div>
 </aside>

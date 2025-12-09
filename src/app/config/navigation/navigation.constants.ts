@@ -3,7 +3,6 @@ import {
   UserCog,
   ChartColumn,
   Settings,
-  Coins,
 } from 'lucide-angular';
 
 import { PRIVATE_ROUTES } from '../routes.config';
@@ -54,36 +53,6 @@ export const NAVIGATION_ITEMS: NavigationItem[] = [
           { id: 3, key: 'view', name: 'Ver' },
           { id: 6, key: 'export', name: 'Exportar' },
         ],
-      },
-    ],
-  },
-  {
-    id: 'cia',
-    label: 'Cia',
-    icon: Coins,
-    route: `/${PRIVATE_ROUTES.CIA}`,
-    children: [
-      {
-        id: 'cia-subitem-1',
-        label: 'Propuestas',
-        icon: Coins,
-        route: `/${PRIVATE_ROUTES.CIA}/propuestas`,
-        permissions: [
-          { id: 3, key: 'view', name: 'Ver' },
-          { id: 4, key: 'edit', name: 'Editar' },
-        ],
-      },
-      {
-        id: 'cia-subitem-2',
-        label: 'Reportes',
-        icon: Coins,
-        route: `/${PRIVATE_ROUTES.CIA}/reportes`,
-      },
-      {
-        id: 'cia-subitem-3',
-        label: 'Auditoría',
-        icon: Coins,
-        route: `/${PRIVATE_ROUTES.CIA}/auditoria`,
       },
     ],
   },

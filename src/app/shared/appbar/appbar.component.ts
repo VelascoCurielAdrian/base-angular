@@ -4,6 +4,7 @@ import {
   Component,
   computed,
   ElementRef,
+  HostListener,
   inject,
   input,
   output,
@@ -155,30 +156,61 @@ export class AppbarComponent {
    * Navega al perfil del usuario
    */
   protected goToProfile(): void {
+    console.log('goToProfile called');
     this.closeUserMenu();
-    void this._router.navigate(['/settings/profile']);
+    setTimeout(() => {
+      console.log('Navigating to profile');
+      void this._router.navigate(['/settings/profile']);
+    }, 100);
   }
 
   /**
    * Navega a la configuración
    */
   protected goToSettings(): void {
+    console.log('goToSettings called');
     this.closeUserMenu();
-    void this._router.navigate(['/settings']);
+    setTimeout(() => {
+      console.log('Navigating to settings');
+      void this._router.navigate(['/settings']);
+    }, 100);
   }
 
   /**
    * Cierra la sesión del usuario
    */
-  protected async logout(): Promise<void> {
+  protected logout(): void {
+    console.log('logout called');
     this.closeUserMenu();
-    try {
-      await this._auth.logout();
-      this._toast.success('Sesión cerrada correctamente');
-      void this._router.navigate(['/login']);
-    } catch (error) {
-      this._toast.error('Error al cerrar sesión');
-      console.error('Error al cerrar sesión:', error);
+    setTimeout(() => {
+      console.log('Executing logout');
+      this._auth.logout()
+        .then(() => {
+          this._toast.success('Sesión cerrada correctamente');
+          void this._router.navigate(['/login']);
+        })
+        .catch((error: unknown) => {
+          this._toast.error('Error al cerrar sesión');
+          console.error('Error al cerrar sesión:', error);
+        });
+    }, 100);
+  }
+
+  /**
+   * Detecta clics fuera del menú de usuario para cerrarlo
+   */
+  @HostListener('document:click', ['$event'])
+  protected onDocumentClick(event: MouseEvent): void {
+    if (!this.isUserMenuOpen()) {
+      return;
+    }
+
+    const target = event.target as HTMLElement;
+    const userMenu = target.closest('.appbar__user-menu');
+
+    // Si el clic no fue dentro del menú de usuario, cerrarlo
+    if (!userMenu) {
+      this.closeUserMenu();
     }
   }
 }
