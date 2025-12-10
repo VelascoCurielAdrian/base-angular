@@ -102,6 +102,49 @@
   --appbar-border: #e1e4e8;
   --appbar-shadow: rgba(0, 0, 0, 0.04);
 
+  /* Notification sidebar variables */
+  --notif-sidebar-bg: #ffffff;
+  --notif-sidebar-overlay: rgba(0, 0, 0, 0.5);
+  --notif-sidebar-shadow: -2px 0 16px rgba(0, 0, 0, 0.1);
+  --notif-header-bg-start: #fafafa;
+  --notif-header-bg-end: #ffffff;
+  --notif-header-border: #e5e7eb;
+  --notif-title-color: #111827;
+  --notif-btn-color: #6b7280;
+  --notif-btn-hover-bg: #f3f4f6;
+  --notif-btn-hover-color: #111827;
+  --notif-empty-color: #9ca3af;
+  --notif-footer-bg: #fafafa;
+  --notif-footer-border: #e5e7eb;
+  --notif-clear-btn-bg: #ffffff;
+  --notif-clear-btn-border: #e5e7eb;
+  --notif-clear-btn-color: #6b7280;
+  --notif-clear-btn-hover-bg: #f9fafb;
+  --notif-clear-btn-hover-border: #d1d5db;
+  --notif-clear-btn-hover-color: #374151;
+  --notif-item-border: #f3f4f6;
+  --notif-item-hover-bg: #f9fafb;
+  --notif-item-unread-bg: #eff6ff;
+  --notif-item-unread-hover-bg: #dbeafe;
+  --notif-item-title-color: #111827;
+  --notif-item-message-color: #6b7280;
+  --notif-item-time-color: #9ca3af;
+  --notif-item-action-color: #2563eb;
+  --notif-item-delete-hover-bg: #fee2e2;
+  --notif-item-delete-hover-color: #dc2626;
+  --notif-item-badge-color: #2563eb;
+  --notif-icon-info-bg: #dbeafe;
+  --notif-icon-info-color: #2563eb;
+  --notif-icon-success-bg: #d1fae5;
+  --notif-icon-success-color: #059669;
+  --notif-icon-warning-bg: #fef3c7;
+  --notif-icon-warning-color: #d97706;
+  --notif-icon-error-bg: #fee2e2;
+  --notif-icon-error-color: #dc2626;
+  --notif-scrollbar-track: transparent;
+  --notif-scrollbar-thumb: #d1d5db;
+  --notif-scrollbar-thumb-hover: #9ca3af;
+
   /* Search input variables */
   --search-bg-start: #f8fafc;
   --search-bg-end: #f1f5f9;
@@ -254,6 +297,49 @@
   --appbar-bg-end: #0f172a;
   --appbar-border: #334155;
   --appbar-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Notification sidebar variables */
+  --notif-sidebar-bg: #1e293b;
+  --notif-sidebar-overlay: rgba(0, 0, 0, 0.7);
+  --notif-sidebar-shadow: -2px 0 16px rgba(0, 0, 0, 0.5);
+  --notif-header-bg-start: #0f172a;
+  --notif-header-bg-end: #1e293b;
+  --notif-header-border: #334155;
+  --notif-title-color: #f1f5f9;
+  --notif-btn-color: #cbd5e1;
+  --notif-btn-hover-bg: #334155;
+  --notif-btn-hover-color: #f1f5f9;
+  --notif-empty-color: #64748b;
+  --notif-footer-bg: #0f172a;
+  --notif-footer-border: #334155;
+  --notif-clear-btn-bg: #1e293b;
+  --notif-clear-btn-border: #334155;
+  --notif-clear-btn-color: #cbd5e1;
+  --notif-clear-btn-hover-bg: #334155;
+  --notif-clear-btn-hover-border: #475569;
+  --notif-clear-btn-hover-color: #f1f5f9;
+  --notif-item-border: #334155;
+  --notif-item-hover-bg: #334155;
+  --notif-item-unread-bg: #1e293b;
+  --notif-item-unread-hover-bg: #334155;
+  --notif-item-title-color: #f1f5f9;
+  --notif-item-message-color: #cbd5e1;
+  --notif-item-time-color: #64748b;
+  --notif-item-action-color: #60a5fa;
+  --notif-item-delete-hover-bg: #7f1d1d;
+  --notif-item-delete-hover-color: #ef4444;
+  --notif-item-badge-color: #60a5fa;
+  --notif-icon-info-bg: #1e293b;
+  --notif-icon-info-color: #60a5fa;
+  --notif-icon-success-bg: #1e293b;
+  --notif-icon-success-color: #22c55e;
+  --notif-icon-warning-bg: #1e293b;
+  --notif-icon-warning-color: #f59e0b;
+  --notif-icon-error-bg: #1e293b;
+  --notif-icon-error-color: #ef4444;
+  --notif-scrollbar-track: transparent;
+  --notif-scrollbar-thumb: #475569;
+  --notif-scrollbar-thumb-hover: #64748b;
 
   /* Search input variables */
   --search-bg-start: #0f172a;

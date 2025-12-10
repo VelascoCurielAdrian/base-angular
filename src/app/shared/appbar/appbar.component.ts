@@ -204,6 +204,14 @@ export class AppbarComponent implements OnInit {
   }
 
   /**
+   * Cambia el tema desde el menú de usuario
+   */
+  protected changeTheme(): void {
+    this.toggleTheme();
+    this.closeUserMenu();
+  }
+
+  /**
    * Alterna el menú de usuario
    */
   protected toggleUserMenu(): void {

@@ -50,7 +50,7 @@ import { NavigationConfigService } from '../../config/navigation';
       </div>
     </div>
     <app-search-overlay />
-    <app-notification-sidebar [isOpen]="isNotificationsSidebarOpen()" (close)="onToggleNotifications()" />
+    <app-notification-sidebar [isOpen]="isNotificationsSidebarOpen()" (closeSidebarNotification)="onToggleNotifications()" />
   `,
   styleUrls: ['./main-layout.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

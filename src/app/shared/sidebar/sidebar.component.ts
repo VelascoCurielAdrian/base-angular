@@ -65,12 +65,21 @@ export class SidebarComponent {
     event.stopPropagation();
 
     const expanded = new Set(this._expandedItems());
-    if (expanded.has(item.id)) {
-      expanded.delete(item.id);
-    } else {
+
+    if (this.isCollapsed() && this.hasChildren(item as NavigationItem)) {
+      // Si el sidebar está cerrado y tiene hijos, expandir y abrir sidebar
       expanded.add(item.id);
+      this._expandedItems.set(expanded);
+      this.toggleCollapse.emit();
+    } else {
+      // Toggle normal
+      if (expanded.has(item.id)) {
+        expanded.delete(item.id);
+      } else {
+        expanded.add(item.id);
+      }
+      this._expandedItems.set(expanded);
     }
-    this._expandedItems.set(expanded);
   }
 
   // Verificar si un item tiene children

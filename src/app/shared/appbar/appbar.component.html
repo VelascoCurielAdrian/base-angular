@@ -66,19 +66,6 @@
         <span class="appbar__notification-badge">{{ unreadNotifications() }}</span>
       }
     </button>
-    <button
-      type="button"
-      class="appbar__icon-button appbar__theme-button"
-      (click)="toggleTheme()"
-      [title]="isDarkTheme() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
-      [attr.aria-label]="isDarkTheme() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
-    >
-      @if (isDarkTheme()) {
-        <lucide-angular [img]="SunIcon" [size]="isMobile() ? 18 : 20" />
-      } @else {
-        <lucide-angular [img]="MoonIcon" [size]="isMobile() ? 18 : 20" />
-      }
-    </button>
 
     @if (user()) {
       <div class="appbar__user-menu">
@@ -143,6 +130,16 @@
               <button type="button" class="appbar__menu-item" (click)="goToSettings()">
                 <lucide-angular [img]="SettingsIcon" [size]="16" />
                 <span>Configuración</span>
+              </button>
+
+              <button type="button" class="appbar__menu-item" (click)="changeTheme()">
+                @if (isDarkTheme()) {
+                  <lucide-angular [img]="SunIcon" [size]="16" />
+                  <span>Cambiar a Claro</span>
+                } @else {
+                  <lucide-angular [img]="MoonIcon" [size]="16" />
+                  <span>Cambiar a Oscuro</span>
+                }
               </button>
 
               <div class="appbar__menu-divider"></div>

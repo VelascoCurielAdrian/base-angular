@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output, computed } from '@angular/core';
 import { Router } from '@angular/router';
 
 import {
@@ -8,14 +8,16 @@ import {
   CheckCheck,
   Trash2,
   Info,
-  CheckCircle2,
-  AlertTriangle,
-  XCircle,
   Clock,
+  Check,
+  AlignEndVertical,
+  CircleAlert,
 } from 'lucide-angular';
 
-import { Notification } from '@models/notification.interface';
 import { NotificationService } from '@services/notification.service';
+import { ThemeService } from '@services/theme.service';
+
+import { Notification } from '@models/notification.interface';
 
 @Component({
   selector: 'app-notification-sidebar',
@@ -28,27 +30,30 @@ import { NotificationService } from '@services/notification.service';
 export class NotificationSidebarComponent {
   private readonly _notificationService = inject(NotificationService);
   private readonly _router = inject(Router);
+  private readonly _theme = inject(ThemeService);
 
-  @Input() isOpen = false;
+  @Input() public isOpen = false;
 
-  @Output() readonly close = new EventEmitter<void>();
+  @Output() public readonly closeSidebarNotification = new EventEmitter<void>();
 
   protected readonly CloseIcon = X;
   protected readonly CheckCheckIcon = CheckCheck;
   protected readonly Trash2Icon = Trash2;
   protected readonly InfoIcon = Info;
-  protected readonly CheckCircle2Icon = CheckCircle2;
-  protected readonly AlertTriangleIcon = AlertTriangle;
-  protected readonly XCircleIcon = XCircle;
+  protected readonly CheckCircle2Icon = Check;
+  protected readonly AlertTriangleIcon = AlignEndVertical;
+  protected readonly XCircleIcon = CircleAlert;
   protected readonly ClockIcon = Clock;
-
   protected readonly notifications = this._notificationService.notifications;
+
+  // Tema
+  protected readonly isDarkTheme = computed(() => this._theme.currentTheme() === 'dark');
 
   /**
    * Emite el evento para cerrar la barra lateral.
    */
   protected onClose(): void {
-    this.close.emit();
+    this.closeSidebarNotification.emit();
   }
 
   /**
@@ -81,7 +86,7 @@ export class NotificationSidebarComponent {
   protected onNotificationClick(notification: Notification): void {
     this.markAsRead(notification);
     if (notification.actionUrl) {
-      this._router.navigate([notification.actionUrl]);
+      void this._router.navigate([notification.actionUrl]);
       this.onClose();
     }
   }
@@ -89,7 +94,7 @@ export class NotificationSidebarComponent {
   /**
    * Obtiene el ícono según el tipo de notificación.
    */
-  protected getNotificationIcon(type: string) {
+  protected getNotificationIcon(type: string): typeof Info {
     switch (type) {
       case 'success':
         return this.CheckCircle2Icon;
@@ -113,9 +118,9 @@ export class NotificationSidebarComponent {
     const days = Math.floor(hours / 24);
 
     if (minutes < 1) {return 'Ahora';}
-    if (minutes < 60) {return `Hace ${minutes} min`;}
-    if (hours < 24) {return `Hace ${hours}h`;}
-    return `Hace ${days}d`;
+    if (minutes < 60) {return `Hace ${minutes.toString()} min`;}
+    if (hours < 24) {return `Hace ${hours.toString()}h`;}
+    return `Hace ${days.toString()}d`;
   }
 
   /**
