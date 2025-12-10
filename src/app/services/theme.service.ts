@@ -6,28 +6,32 @@ export type Theme = 'light' | 'dark';
   providedIn: 'root',
 })
 export class ThemeService {
-  private readonly THEME_KEY = 'app-theme';
+  protected readonly themeKey = 'app-theme';
 
   // Signal para el tema actual
-  public readonly currentTheme = signal<Theme>(this.getStoredTheme());
+  public readonly currentTheme = signal<Theme>(this._getStoredTheme());
 
   constructor() {
     // Effect para aplicar el tema cuando cambie
     effect(() => {
       const theme = this.currentTheme();
-      this.applyTheme(theme);
-      this.saveTheme(theme);
+      this._applyTheme(theme);
+      this._saveTheme(theme);
     });
   }
 
   /**
    * Obtiene el tema almacenado o el tema del sistema
    */
-  private getStoredTheme(): Theme {
-    if (typeof window === 'undefined') return 'light';
+  private _getStoredTheme(): Theme {
+    if (typeof window === 'undefined') {
+      return 'light';
+    }
 
-    const stored = localStorage.getItem(this.THEME_KEY) as Theme | null;
-    if (stored) return stored;
+    const stored = localStorage.getItem(this.themeKey) as Theme | null;
+    if (stored) {
+      return stored;
+    }
 
     // Si no hay tema almacenado, usar preferencia del sistema
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -36,8 +40,10 @@ export class ThemeService {
   /**
    * Aplica el tema al documento
    */
-  private applyTheme(theme: Theme): void {
-    if (typeof document === 'undefined') return;
+  private _applyTheme(theme: Theme): void {
+    if (typeof document === 'undefined') {
+      return;
+    }
 
     console.log('Aplicando tema:', theme);
     document.documentElement.setAttribute('data-theme', theme);
@@ -52,9 +58,11 @@ export class ThemeService {
   /**
    * Guarda el tema en localStorage
    */
-  private saveTheme(theme: Theme): void {
-    if (typeof localStorage === 'undefined') return;
-    localStorage.setItem(this.THEME_KEY, theme);
+  private _saveTheme(theme: Theme): void {
+    if (typeof localStorage === 'undefined') {
+      return;
+    };
+    localStorage.setItem(this.themeKey, theme);
   }
 
   /**

@@ -1,10 +1,10 @@
 <!-- eslint-disable @angular-eslint/template/no-call-expression -->
 <header class="appbar" [class.appbar--mobile]="isMobile()" [class.appbar--tablet]="isTablet()" [class.appbar--small]="isSmallScreen()">
   <div class="appbar__left">
-    <button 
-      type="button" 
-      class="appbar__menu-button" 
-      (click)="onMenuClick()" 
+    <button
+      type="button"
+      class="appbar__menu-button"
+      (click)="onMenuClick()"
       title="Menú"
       [attr.aria-expanded]="isSidebarCollapsed()"
       aria-label="Toggle menu"
@@ -14,14 +14,14 @@
   </div>
 
   <div class="appbar__center">
-    <div class="appbar__search-container" 
+    <div class="appbar__search-container"
          [class.appbar__search-container--mobile]="isMobile()"
          [class.appbar__search-container--active]="isSearchActive()">
-      <lucide-angular 
-        class="appbar__search-icon" 
-        [img]="SearchIcon" 
+      <lucide-angular
+        class="appbar__search-icon"
+        [img]="SearchIcon"
         [size]="isMobile() ? 16 : 18" />
-      
+
       <input
         #searchInput
         type="text"
@@ -36,10 +36,10 @@
         autocomplete="off"
         spellcheck="false"
       />
-      
+
       @if (isSearchActive()) {
-        <button 
-          type="button" 
+        <button
+          type="button"
           class="appbar__search-clear"
           (click)="clearSearch()"
           title="Limpiar búsqueda"
@@ -53,16 +53,30 @@
   </div>
 
   <div class="appbar__right">
-    <button 
-      type="button" 
-      class="appbar__icon-button" 
-      (click)="toggleNotifications.emit()" 
+
+    <button
+      type="button"
+      class="appbar__icon-button"
+      (click)="toggleNotifications.emit()"
       title="Notificaciones"
       aria-label="Notificaciones"
     >
       <lucide-angular [img]="BellIcon" [size]="isMobile() ? 18 : 20" />
       @if (unreadNotifications() > 0) {
         <span class="appbar__notification-badge">{{ unreadNotifications() }}</span>
+      }
+    </button>
+    <button
+      type="button"
+      class="appbar__icon-button appbar__theme-button"
+      (click)="toggleTheme()"
+      [title]="isDarkTheme() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+      [attr.aria-label]="isDarkTheme() ? 'Cambiar a tema claro' : 'Cambiar a tema oscuro'"
+    >
+      @if (isDarkTheme()) {
+        <lucide-angular [img]="SunIcon" [size]="isMobile() ? 18 : 20" />
+      } @else {
+        <lucide-angular [img]="MoonIcon" [size]="isMobile() ? 18 : 20" />
       }
     </button>
 

@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
     } catch (error) {
       console.error('Error durante el login:', error);
       const httpError: HttpError = this._errorHandler.toHttpError(error);
-      this._toast.error(this._errorHandler.getUserMessage(httpError));
+      this._toast.error(httpError.message);
     }
   }
 }

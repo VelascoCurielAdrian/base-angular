@@ -52,6 +52,24 @@
   --login-title-text: #ffffff;
   --login-subtitle-text: rgba(255, 255, 255, 0.9);
 
+  /* Sidebar - Tema Claro */
+  --sidebar-bg-start: #10b981;
+  --sidebar-bg-end: #047857;
+  --sidebar-text: #ffffff;
+  --sidebar-border: #d4af37;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.1);
+  --sidebar-item-active: rgba(255, 255, 255, 0.2);
+  --sidebar-shadow: rgba(0, 0, 0, 0.3);
+
+  /* AppBar - Tema Claro */
+  --appbar-bg: rgba(255, 255, 255, 0.95);
+  --appbar-border: rgba(0, 0, 0, 0.06);
+  --appbar-shadow: rgba(0, 0, 0, 0.04);
+  --appbar-text: #334155;
+  --appbar-button-bg: rgba(248, 250, 252, 0.8);
+  --appbar-button-border: rgba(226, 232, 240, 0.8);
+  --appbar-button-hover: rgba(255, 255, 255, 0.95);
+
   /* AppBar variables */
   --appbar-bg-start: #ffffff;
   --appbar-bg-end: #fafbfc;
@@ -160,6 +178,24 @@
   --login-header-bg-end: #065f46;
   --login-title-text: #ffffff;
   --login-subtitle-text: rgba(255, 255, 255, 0.85);
+
+  /* Sidebar - Tema Oscuro */
+  --sidebar-bg-start: #064e3b;
+  --sidebar-bg-end: #065f46;
+  --sidebar-text: #e2e8f0;
+  --sidebar-border: #10b981;
+  --sidebar-item-hover: rgba(16, 185, 129, 0.1);
+  --sidebar-item-active: rgba(16, 185, 129, 0.2);
+  --sidebar-shadow: rgba(0, 0, 0, 0.5);
+
+  /* AppBar - Tema Oscuro */
+  --appbar-bg: rgba(30, 41, 59, 0.95);
+  --appbar-border: rgba(255, 255, 255, 0.1);
+  --appbar-shadow: rgba(0, 0, 0, 0.3);
+  --appbar-text: #e2e8f0;
+  --appbar-button-bg: rgba(51, 65, 85, 0.8);
+  --appbar-button-border: rgba(71, 85, 105, 0.8);
+  --appbar-button-hover: rgba(71, 85, 105, 0.95);
 
   /* AppBar variables */
   --appbar-bg-start: #1e293b;

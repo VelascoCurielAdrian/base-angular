@@ -14,10 +14,11 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { LucideAngularModule, Menu, Search, User, Settings, LogOut, ChevronDown, Bell } from 'lucide-angular';
+import { LucideAngularModule, Menu, Search, User, Settings, LogOut, ChevronDown, Bell, Sun, Moon } from 'lucide-angular';
 
 import { AuthService } from '@services/auth.service';
 import { NotificationService } from '@services/notification.service';
+import { ThemeService } from '@services/theme.service';
 import { ToastService } from '@services/toast.service';
 
 /**
@@ -44,6 +45,7 @@ export class AppbarComponent implements OnInit {
   private readonly _router = inject(Router);
   private readonly _toast = inject(ToastService);
   private readonly _notificationService = inject(NotificationService);
+  private readonly _theme = inject(ThemeService);
 
   // Iconos
   protected readonly SearchIcon = Search;
@@ -53,6 +55,8 @@ export class AppbarComponent implements OnInit {
   protected readonly LogOutIcon = LogOut;
   protected readonly ChevronDownIcon = ChevronDown;
   protected readonly BellIcon = Bell;
+  protected readonly SunIcon = Sun;
+  protected readonly MoonIcon = Moon;
 
   // Inputs
   public readonly isSidebarCollapsed = input<boolean>(false);
@@ -89,10 +93,17 @@ export class AppbarComponent implements OnInit {
   // Notificaciones
   protected readonly unreadNotifications = this._notificationService.unreadCount;
 
+  // Tema
+  protected readonly isDarkTheme = computed(() => this._theme.currentTheme() === 'dark');
+
   // Computed para el placeholder del buscador
   protected readonly searchPlaceholder = computed(() => {
-    if (this.isMobile()) return 'Buscar...';
-    if (this.isSmallScreen()) return 'Buscar...';
+    if (this.isMobile()){
+      return 'Buscar...';
+    }
+    if (this.isSmallScreen()) {
+      return 'Buscar...';
+    }
     return 'Buscar opciones o rutas...';
   });
 
@@ -183,6 +194,13 @@ export class AppbarComponent implements OnInit {
       input.nativeElement.value = '';
       input.nativeElement.blur();
     }
+  }
+
+  /**
+   * Alterna entre tema claro y oscuro
+   */
+  protected toggleTheme(): void {
+    this._theme.toggleTheme();
   }
 
   /**
@@ -278,7 +296,7 @@ export class AppbarComponent implements OnInit {
    */
   @HostListener('window:resize', [])
   protected onResize(): void {
-    this.updateViewportStatus();
+    this._updateViewportStatus();
   }
 
   /**
@@ -296,19 +314,19 @@ export class AppbarComponent implements OnInit {
   /**
    * Inicializa el estado del viewport
    */
-  ngOnInit(): void {
-    this.updateViewportStatus();
+  public ngOnInit(): void {
+    this._updateViewportStatus();
   }
 
   /**
    * Actualiza el estado del viewport basado en el tamaño de pantalla
    */
-  private updateViewportStatus(): void {
+  private _updateViewportStatus(): void {
     const width = window.innerWidth;
     this.isMobile.set(width <= 768);
     this.isTablet.set(width > 768 && width <= 1024);
     this.isSmallScreen.set(width <= 480);
-    
+
     // Cerrar el menú de usuario si cambiamos de desktop a mobile
     if (this.isMobile() && this.isUserMenuOpen()) {
       this.closeUserMenu();
