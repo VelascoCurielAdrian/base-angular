@@ -70,6 +70,32 @@
   --appbar-button-border: rgba(226, 232, 240, 0.8);
   --appbar-button-hover: rgba(255, 255, 255, 0.95);
 
+  /* Global Loading - Tema Claro */
+  --loading-overlay-bg: rgba(255, 255, 255, 0.95);
+  --loading-text: #333333;
+  --loading-shadow: rgba(0, 0, 0, 0.1);
+
+  /* Not Found - Tema Claro */
+  --notfound-bg: #f8fafc;
+  --notfound-card-bg: #ffffff;
+  --notfound-card-border: rgba(15, 15, 15, 0.1);
+  --notfound-icon-color: #10b981;
+  --notfound-icon-shadow: rgba(16, 185, 129, 0.2);
+  --notfound-title: #047857;
+  --notfound-title-shadow: rgba(4, 120, 87, 0.1);
+  --notfound-badge-bg: rgba(16, 185, 129, 0.1);
+  --notfound-badge-border: rgba(16, 185, 129, 0.4);
+  --notfound-badge-shadow: rgba(16, 185, 129, 0.15);
+  --notfound-badge-label: #047857;
+  --notfound-badge-value: #065f46;
+  --notfound-message: #424242;
+  --notfound-btn-primary-bg: #10b981;
+  --notfound-btn-primary-hover: #059669;
+  --notfound-btn-secondary-bg: transparent;
+  --notfound-btn-secondary-border: #d1d5db;
+  --notfound-btn-secondary-text: #6b7280;
+  --notfound-btn-secondary-hover-bg: #f3f4f6;
+
   /* AppBar variables */
   --appbar-bg-start: #ffffff;
   --appbar-bg-end: #fafbfc;
@@ -196,6 +222,32 @@
   --appbar-button-bg: rgba(51, 65, 85, 0.8);
   --appbar-button-border: rgba(71, 85, 105, 0.8);
   --appbar-button-hover: rgba(71, 85, 105, 0.95);
+
+  /* Global Loading - Tema Oscuro */
+  --loading-overlay-bg: rgba(15, 23, 42, 0.95);
+  --loading-text: #e2e8f0;
+  --loading-shadow: rgba(0, 0, 0, 0.3);
+
+  /* Not Found - Tema Oscuro */
+  --notfound-bg: #0f172a;
+  --notfound-card-bg: #1e293b;
+  --notfound-card-border: rgba(255, 255, 255, 0.1);
+  --notfound-icon-color: #10b981;
+  --notfound-icon-shadow: rgba(16, 185, 129, 0.3);
+  --notfound-title: #10b981;
+  --notfound-title-shadow: rgba(16, 185, 129, 0.2);
+  --notfound-badge-bg: rgba(16, 185, 129, 0.15);
+  --notfound-badge-border: rgba(16, 185, 129, 0.5);
+  --notfound-badge-shadow: rgba(16, 185, 129, 0.2);
+  --notfound-badge-label: #10b981;
+  --notfound-badge-value: #34d399;
+  --notfound-message: #cbd5e1;
+  --notfound-btn-primary-bg: #10b981;
+  --notfound-btn-primary-hover: #059669;
+  --notfound-btn-secondary-bg: transparent;
+  --notfound-btn-secondary-border: #475569;
+  --notfound-btn-secondary-text: #94a3b8;
+  --notfound-btn-secondary-hover-bg: #334155;
 
   /* AppBar variables */
   --appbar-bg-start: #1e293b;

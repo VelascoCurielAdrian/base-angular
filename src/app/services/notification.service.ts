@@ -43,7 +43,7 @@ export class NotificationService {
         message: 'Tu sesión expirará en 10 minutos.',
         type: 'warning',
         timestamp: new Date(Date.now() - 30 * 60 * 1000), // 30 minutos atrás
-        isRead: true,
+        isRead: false,
       },
     ];
 

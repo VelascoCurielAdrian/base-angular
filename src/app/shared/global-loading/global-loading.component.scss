@@ -1,13 +1,15 @@
 .global-loading-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(4px);
+  background: var(--loading-overlay-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
   animation: fadeIn 0.2s ease-in-out;
+  transition: background 0.3s ease;
 }
 
 .loading-container {
@@ -21,15 +23,17 @@
   width: 120px;
   height: 120px;
   animation: spin 1.5s linear infinite;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 4px 8px var(--loading-shadow));
+  transition: filter 0.3s ease;
 }
 
 .loading-text {
   font-size: 1.125rem;
   font-weight: 500;
-  color: #333;
+  color: var(--loading-text);
   margin: 0;
   animation: pulse 1.5s ease-in-out infinite;
+  transition: color 0.3s ease;
 }
 
 @keyframes spin {
