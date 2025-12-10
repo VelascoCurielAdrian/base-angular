@@ -7,6 +7,7 @@ import {
   HostListener,
   inject,
   input,
+  OnInit,
   output,
   signal,
   viewChild,
@@ -37,7 +38,7 @@ import { ToastService } from '@services/toast.service';
   styleUrls: ['./appbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppbarComponent {
+export class AppbarComponent implements OnInit {
   // Servicios
   private readonly _auth = inject(AuthService);
   private readonly _router = inject(Router);
@@ -62,6 +63,11 @@ export class AppbarComponent {
   // Estado
   protected readonly isSearchFocused = signal(false);
   protected readonly isUserMenuOpen = signal(false);
+  protected readonly isMobile = signal(false);
+  protected readonly isTablet = signal(false);
+  protected readonly isSmallScreen = signal(false);
+  protected readonly searchValue = signal('');
+  protected readonly isSearchActive = signal(false);
 
   // Datos del usuario
   protected readonly user = computed(() => this._auth.user());
@@ -83,6 +89,13 @@ export class AppbarComponent {
   // Notificaciones
   protected readonly unreadNotifications = this._notificationService.unreadCount;
 
+  // Computed para el placeholder del buscador
+  protected readonly searchPlaceholder = computed(() => {
+    if (this.isMobile()) return 'Buscar...';
+    if (this.isSmallScreen()) return 'Buscar...';
+    return 'Buscar opciones o rutas...';
+  });
+
   // Outputs para comunicación con el padre
   public readonly toggleSidebar = output();
   public readonly searchFocus = output();
@@ -94,7 +107,51 @@ export class AppbarComponent {
    */
   protected onSearchClick(): void {
     this.isSearchFocused.set(true);
+    this.isSearchActive.set(true);
     this.searchFocus.emit();
+    this.focusSearchInput();
+  }
+
+  /**
+   * Maneja la entrada de texto en el buscador
+   */
+  protected onSearchInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    const value = target.value.trim();
+    this.searchValue.set(value);
+    this.isSearchActive.set(value.length > 0);
+  }
+
+  /**
+   * Maneja las teclas presionadas en el buscador
+   */
+  protected onSearchKeydown(event: KeyboardEvent): void {
+    if (event.key === 'Escape') {
+      this.clearSearch();
+      event.preventDefault();
+    } else if (event.key === 'Enter' && this.searchValue()) {
+      this.performSearch();
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Realiza la búsqueda
+   */
+  protected performSearch(): void {
+    if (this.searchValue().length >= 2) {
+      console.log('Performing search:', this.searchValue());
+      // Aquí se implementaría la lógica de búsqueda real
+    }
+  }
+
+  /**
+   * Limpia la búsqueda
+   */
+  protected clearSearch(): void {
+    this.searchValue.set('');
+    this.isSearchActive.set(false);
+    this.resetSearch();
   }
 
   /**
@@ -119,6 +176,8 @@ export class AppbarComponent {
    */
   public resetSearch(): void {
     this.isSearchFocused.set(false);
+    this.searchValue.set('');
+    this.isSearchActive.set(false);
     const input = this.searchInputRef();
     if (input) {
       input.nativeElement.value = '';
@@ -210,6 +269,48 @@ export class AppbarComponent {
 
     // Si el clic no fue dentro del menú de usuario, cerrarlo
     if (!userMenu) {
+      this.closeUserMenu();
+    }
+  }
+
+  /**
+   * Maneja el resize de la ventana para ajustar el comportamiento responsive
+   */
+  @HostListener('window:resize', [])
+  protected onResize(): void {
+    this.updateViewportStatus();
+  }
+
+  /**
+   * Maneja los atajos de teclado globales
+   */
+  @HostListener('document:keydown', ['$event'])
+  protected onGlobalKeydown(event: KeyboardEvent): void {
+    // Ctrl+K o Cmd+K para enfocar el buscador
+    if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+      this.onSearchClick();
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Inicializa el estado del viewport
+   */
+  ngOnInit(): void {
+    this.updateViewportStatus();
+  }
+
+  /**
+   * Actualiza el estado del viewport basado en el tamaño de pantalla
+   */
+  private updateViewportStatus(): void {
+    const width = window.innerWidth;
+    this.isMobile.set(width <= 768);
+    this.isTablet.set(width > 768 && width <= 1024);
+    this.isSmallScreen.set(width <= 480);
+    
+    // Cerrar el menú de usuario si cambiamos de desktop a mobile
+    if (this.isMobile() && this.isUserMenuOpen()) {
       this.closeUserMenu();
     }
   }

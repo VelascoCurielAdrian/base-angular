@@ -1,29 +1,66 @@
 <!-- eslint-disable @angular-eslint/template/no-call-expression -->
-<header class="appbar">
+<header class="appbar" [class.appbar--mobile]="isMobile()" [class.appbar--tablet]="isTablet()" [class.appbar--small]="isSmallScreen()">
   <div class="appbar__left">
-    <button type="button" class="appbar__menu-button" (click)="onMenuClick()" title="Menú">
-      <lucide-angular [img]="MenuIcon" [size]="24" />
+    <button 
+      type="button" 
+      class="appbar__menu-button" 
+      (click)="onMenuClick()" 
+      title="Menú"
+      [attr.aria-expanded]="isSidebarCollapsed()"
+      aria-label="Toggle menu"
+    >
+      <lucide-angular [img]="MenuIcon" [size]="isMobile() ? 20 : 24" />
     </button>
   </div>
 
   <div class="appbar__center">
-    <div class="appbar__search-container">
-      <lucide-angular class="appbar__search-icon" [img]="SearchIcon" [size]="20" />
+    <div class="appbar__search-container" 
+         [class.appbar__search-container--mobile]="isMobile()"
+         [class.appbar__search-container--active]="isSearchActive()">
+      <lucide-angular 
+        class="appbar__search-icon" 
+        [img]="SearchIcon" 
+        [size]="isMobile() ? 16 : 18" />
+      
       <input
         #searchInput
         type="text"
         class="appbar__search-input"
-        placeholder="Buscar opciones o rutas..."
+        [placeholder]="searchPlaceholder()"
+        [value]="searchValue()"
         (click)="onSearchClick()"
-        readonly
+        (input)="onSearchInput($event)"
+        (keydown)="onSearchKeydown($event)"
+        (focus)="isSearchFocused.set(true)"
+        (blur)="isSearchFocused.set(false)"
+        autocomplete="off"
+        spellcheck="false"
       />
-      <kbd class="appbar__shortcut">Ctrl K</kbd>
+      
+      @if (isSearchActive()) {
+        <button 
+          type="button" 
+          class="appbar__search-clear"
+          (click)="clearSearch()"
+          title="Limpiar búsqueda"
+          aria-label="Clear search">
+          <span>×</span>
+        </button>
+      } @else if (!isMobile() && !isSmallScreen()) {
+        <kbd class="appbar__shortcut">⌘K</kbd>
+      }
     </div>
   </div>
 
   <div class="appbar__right">
-    <button type="button" class="appbar__icon-button" (click)="toggleNotifications.emit()" title="Notificaciones">
-      <lucide-angular [img]="BellIcon" [size]="20" />
+    <button 
+      type="button" 
+      class="appbar__icon-button" 
+      (click)="toggleNotifications.emit()" 
+      title="Notificaciones"
+      aria-label="Notificaciones"
+    >
+      <lucide-angular [img]="BellIcon" [size]="isMobile() ? 18 : 20" />
       @if (unreadNotifications() > 0) {
         <span class="appbar__notification-badge">{{ unreadNotifications() }}</span>
       }
@@ -34,24 +71,29 @@
         <button
           type="button"
           class="appbar__user-button"
+          [class.appbar__user-button--mobile]="isMobile()"
           (click)="toggleUserMenu()"
           [class.appbar__user-button--active]="isUserMenuOpen()"
           title="Menú de usuario"
+          aria-label="User menu"
+          [attr.aria-expanded]="isUserMenuOpen()"
         >
-          <div class="appbar__avatar">
+          <div class="appbar__avatar" [class.appbar__avatar--mobile]="isMobile()">
             @if (user()?.avatar_url) {
               <img [src]="user()?.avatar_url" [alt]="userName()" class="appbar__avatar-img" />
             } @else {
               <span class="appbar__avatar-initials">{{ userInitials() }}</span>
             }
           </div>
-          <span class="appbar__user-name">{{ userName() }}</span>
-          <lucide-angular
-            [img]="ChevronDownIcon"
-            [size]="16"
-            class="appbar__chevron"
-            [class.appbar__chevron--rotated]="isUserMenuOpen()"
-          />
+          @if (!isMobile()) {
+            <span class="appbar__user-name">{{ userName() }}</span>
+            <lucide-angular
+              [img]="ChevronDownIcon"
+              [size]="16"
+              class="appbar__chevron"
+              [class.appbar__chevron--rotated]="isUserMenuOpen()"
+            />
+          }
         </button>
 
         @if (isUserMenuOpen()) {
