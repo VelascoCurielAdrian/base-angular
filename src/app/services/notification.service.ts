@@ -57,6 +57,7 @@ export class NotificationService {
     actionUrl?: string,
     actionLabel?: string,
   ): void {
+
     const notification: Notification = {
       id: Date.now().toString(),
       title,
