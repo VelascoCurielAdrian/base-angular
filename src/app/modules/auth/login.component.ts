@@ -79,7 +79,9 @@ export class LoginComponent implements OnInit {
     try {
       const response =  await this._auth.loginWithCredentials(username, password);
       console.log('Respuesta de login:', response);
-      this._toast.success('¡Bienvenido de nuevo!');
+      const gender = response.data.user.gender === 'male';
+      const welcomeMessage = gender ? ` ¡Bienvenido de nuevo, ${response.data.user.first_name}!` : ` ¡Bienvenida de nuevo, ${response.data.user.first_name}!`;
+      this._toast.success(welcomeMessage);
       await this._router.navigate(['/']);
     } catch (error) {
       console.error('Error durante el login:', error);
