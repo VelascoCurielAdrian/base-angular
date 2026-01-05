@@ -155,3 +155,14 @@
     }
   </div>
 </header>
+
+<!-- Modal de confirmación para cerrar sesión -->
+<app-confirmation-modal
+  [isVisible]="showLogoutModal()"
+  [title]="'Confirmar salida'"
+  [message]="'¿Estás absolutamente seguro de que deseas cerrar sesión? Perderás el acceso a tu cuenta hasta que vuelvas a iniciar sesión.'"
+  [primaryActionText]="'Sí, cerrar sesión'"
+  [secondaryActionText]="'Cancelar'"
+  (confirm)="onConfirmLogout()"
+  (cancelled)="onCancelLogout()">
+</app-confirmation-modal>

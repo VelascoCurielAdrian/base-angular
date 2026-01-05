@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ConfirmationModalComponent } from '@shared/confirmation-modal/confirmation-modal.component';
 import { LucideAngularModule, Menu, Search, User, Settings, LogOut, ChevronDown, Bell, Sun, Moon } from 'lucide-angular';
 
 import { AuthService } from '@services/auth.service';
@@ -34,7 +35,7 @@ import { ToastService } from '@services/toast.service';
 @Component({
   selector: 'app-appbar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, ConfirmationModalComponent],
   templateUrl: './appbar.component.html',
   styleUrls: ['./appbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -72,6 +73,7 @@ export class AppbarComponent implements OnInit {
   protected readonly isSmallScreen = signal(false);
   protected readonly searchValue = signal('');
   protected readonly isSearchActive = signal(false);
+  protected readonly showLogoutModal = signal(false);
 
   // Datos del usuario
   protected readonly user = computed(() => this._auth.user());
@@ -262,23 +264,35 @@ export class AppbarComponent implements OnInit {
   }
 
   /**
-   * Cierra la sesión del usuario
+   * Abre el modal de confirmación de logout
    */
   protected logout(): void {
-    console.log('logout called');
     this.closeUserMenu();
-    setTimeout(() => {
-      console.log('Executing logout');
-      this._auth.logout()
-        .then(() => {
-          this._toast.success('Sesión cerrada correctamente');
-          void this._router.navigate(['/login']);
-        })
-        .catch((error: unknown) => {
-          this._toast.error('Error al cerrar sesión');
-          console.error('Error al cerrar sesión:', error);
-        });
-    }, 100);
+    this.showLogoutModal.set(true);
+  }
+
+  /**
+   * Confirma y ejecuta el cierre de sesión
+   */
+  protected onConfirmLogout(): void {
+    this.showLogoutModal.set(false);
+    console.log('Executing logout');
+    this._auth.logout()
+      .then(() => {
+        this._toast.success('Sesión cerrada correctamente');
+        void this._router.navigate(['/login']);
+      })
+      .catch((error: unknown) => {
+        this._toast.error('Error al cerrar sesión');
+        console.error('Error al cerrar sesión:', error);
+      });
+  }
+
+  /**
+   * Cancela el cierre de sesión
+   */
+  protected onCancelLogout(): void {
+    this.showLogoutModal.set(false);
   }
 
   /**

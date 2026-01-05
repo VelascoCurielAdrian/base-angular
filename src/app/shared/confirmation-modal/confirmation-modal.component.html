@@ -1,0 +1,47 @@
+<!-- Overlay: Fondo semitransparente que cubre toda la pantalla -->
+<div
+  class="modal-overlay"
+  *ngIf="isVisible"
+  (click)="onOverlayClick()"
+  (keydown.escape)="onOverlayClick()"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="'modal-title'"
+  [attr.aria-describedby]="'modal-message'">
+
+  <!-- Contenedor del Modal -->
+  <div
+    class="modal-container"
+    (click)="onModalClick($event)"
+    (keydown)="$event.stopPropagation()">
+
+    <!-- Encabezado del Modal -->
+    <div class="modal-header">
+      <h2 id="modal-title" class="modal-title">{{ title }}</h2>
+    </div>
+
+    <!-- Cuerpo del Modal -->
+    <div class="modal-body">
+      <p id="modal-message" class="modal-message">{{ message }}</p>
+    </div>
+
+    <!-- Footer con botones de acción -->
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="modal-button modal-button--secondary"
+        (click)="onCancel()"
+        aria-label="Cancelar acción">
+        {{ secondaryActionText }}
+      </button>
+
+      <button
+        type="button"
+        class="modal-button modal-button--primary"
+        (click)="onConfirm()"
+        aria-label="Confirmar acción">
+        {{ primaryActionText }}
+      </button>
+    </div>
+  </div>
+</div>
